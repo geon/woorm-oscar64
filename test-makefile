@@ -13,6 +13,10 @@ src_files := \
 	src/path-controller.h \
 	src/path-controller.test.c \
 	src/path-controller.test.h \
+	src/circular-buffer.c \
+	src/circular-buffer.h \
+	src/circular-buffer.test.c \
+	src/circular-buffer.test.h \
 
 .DELETE_ON_ERROR:
 $(prg): test-makefile $(src_files)
