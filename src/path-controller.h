@@ -7,6 +7,7 @@
 typedef struct PathController
 {
 	Direction *path;
+	uint8_t pathLength;
 	uint8_t currentPathStep;
 } PathController;
 
