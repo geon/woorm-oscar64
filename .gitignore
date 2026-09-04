@@ -1,0 +1,5 @@
+build/*.asm
+build/*.int
+build/*.lbl
+build/*.map
+build/*.prg
