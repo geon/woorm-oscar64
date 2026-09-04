@@ -7,11 +7,13 @@ void pathControllerTest()
 	{
 		Direction path[] = {
 			Direction_right,
+			Direction_left,
 		};
 		PathController x;
 		pathControllerInit(&x, path, sizeof(path));
 
 		assertByte("Single step.", pathControllerGetDirection(&x), Direction_right);
+		assertByte("Multiple steps.", pathControllerGetDirection(&x), Direction_left);
 	}
 	endTest();
 }
