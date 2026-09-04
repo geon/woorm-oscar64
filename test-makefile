@@ -1,0 +1,19 @@
+emulator := /Applications/vice-arm64-gtk3-3.6.1/bin/x64sc
+debugger := /Applications/Retro\ Debugger/Retro\ Debugger.app/Contents/MacOS/Retro\ Debugger
+oscar64 := ../oscar64/bin/oscar64
+inc := ../oscar64/include
+
+prg := build/test.prg
+
+src_files := \
+	src/main.test.c \
+	src/test/test.c \
+	src/test/test.h \
+
+.DELETE_ON_ERROR:
+$(prg): test-makefile $(src_files)
+	$(oscar64) -o=$(prg) -i=$(inc) -strict $(src_files) -e
+
+.PHONY: clean
+clean:
+	rm -f $(prg)

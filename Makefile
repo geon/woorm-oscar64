@@ -8,7 +8,7 @@ prg := build/woorm.prg
 src_files := src/main.c
 
 .PHONY: verify
-verify: clean $(prg)
+verify: clean test $(prg)
 
 .DELETE_ON_ERROR:
 $(prg): Makefile $(src_files)
@@ -17,7 +17,12 @@ $(prg): Makefile $(src_files)
 .PHONY: clean
 clean:
 	rm -f $(prg)
+	make --makefile=test-makefile clean
 
 .PHONY: run
 run: $(prg)
 	$(emulator) $(prg) 1> /dev/null
+
+.PHONY: test
+test:
+	make --makefile=test-makefile
