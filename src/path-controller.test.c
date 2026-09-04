@@ -13,6 +13,7 @@ void pathControllerTest()
 
 		assertByte("Single step.", pathControllerGetDirection(0), Direction_right);
 		assertByte("Multiple steps.", pathControllerGetDirection(0), Direction_left);
+		assertByte("Loop steps.", pathControllerGetDirection(0), Direction_right);
 	}
 	endTest();
 }
