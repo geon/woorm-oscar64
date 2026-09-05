@@ -5,7 +5,11 @@ inc := ../oscar64/include
 
 prg := build/woorm.prg
 
-src_files := src/main.c
+src_files := \
+	src/main.c \
+	src/screen-buffer.c \
+	src/screen.c \
+	src/screen.h \
 
 .PHONY: verify
 verify: clean test $(prg)
