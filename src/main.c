@@ -1,3 +1,5 @@
+#include "direction.h"
+#include "screen.h"
 #include <c64/cia.h>
 #include <c64/memmap.h>
 #include <c64/vic.h>
@@ -30,12 +32,13 @@ void setup(void)
 	cia_init();
 	// Unmap basic/kernal/rom-charsets.
 	mmap_set(MMAP_NO_ROM);
-	vic_setmode(VICM_TEXT, (uint8_t *)0x0400, charset);
+	vic_setmode(VICM_TEXT, screenChars, charset);
 }
 
 int main()
 {
 	setup();
+	screenClear(0);
 
 	return 0;
 }
