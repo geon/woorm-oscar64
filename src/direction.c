@@ -1,7 +1,6 @@
 #include "direction.h"
+#include "screen.h"
 #include <stdint.h>
-
-#define SCREEN_WIDTH 40
 
 int8_t offsets[Direction_count] = {
 	// Direction_up
