@@ -16,6 +16,9 @@ void wormInit(uint8_t wormIndex, uint16_t pos, Direction direction, void *contro
 	wormTailPosition[wormIndex] = pos - getPositionOffsetForDirection(direction) * 3;
 	wormController[wormIndex] = controller;
 	wormControllerGetDirection[wormIndex] = controllerGetDirection;
+	wormHeadMicroStep[wormIndex] = 0;
+	wormTailMicroStep[wormIndex] = 0;
+	wormSpeed[wormIndex] = 16;
 	circularBufferInit(&wormCells[wormIndex].begin, &wormCells[wormIndex].end);
 
 	wormPushDirection(wormIndex, direction);
@@ -65,8 +68,36 @@ void wormFullStepTail(uint8_t wormIndex)
 	circularBufferPop(&wormCells[wormIndex].begin, wormCells[wormIndex].end, &segmentIndex);
 }
 
+void wormMicroStepHead(uint8_t wormIndex, uint8_t numMicroSteps)
+{
+	uint8_t old = wormHeadMicroStep[wormIndex];
+	uint8_t new = wormHeadMicroStep[wormIndex] += numMicroSteps;
+	bool overflowed = old > new;
+
+	if (overflowed)
+	{
+		wormFullStepHead(wormIndex);
+	}
+}
+
+void wormMicroStepTail(uint8_t wormIndex, uint8_t numMicroSteps)
+{
+	uint8_t old = wormTailMicroStep[wormIndex];
+	uint8_t new = wormTailMicroStep[wormIndex] += numMicroSteps;
+	bool overflowed = old > new;
+
+	if (overflowed)
+	{
+		wormFullStepTail(wormIndex);
+	}
+}
+
 void wormStep(uint8_t wormIndex)
 {
-	wormFullStepHead(wormIndex);
-	wormFullStepTail(wormIndex);
+	uint8_t growthRate = 1;
+	uint8_t headSpeed = wormSpeed[wormIndex];
+	uint8_t tailSpeed = headSpeed;
+
+	wormMicroStepHead(wormIndex, headSpeed);
+	wormMicroStepTail(wormIndex, tailSpeed);
 }

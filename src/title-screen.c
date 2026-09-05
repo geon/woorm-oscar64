@@ -39,6 +39,8 @@ void titleScreen(void)
 
 	wormInit(0, pathStartA, Direction_up, &pathControllerA, pathControllerGetDirection);
 	wormInit(1, pathStartB, Direction_up, &pathControllerB, pathControllerGetDirection);
+	wormSpeed[0] = 255;
+	wormSpeed[1] = 64;
 
 	for (;;)
 	{
