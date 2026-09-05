@@ -54,11 +54,14 @@ void wormFullStepHead(Worm *worm)
 	worm->headPosition = nextPosition;
 	wormPushDirection(worm, direction);
 
-	wormDraw(worm);
+	// Draw the worm in the tile it just entered.
+	screenChars[worm->headPosition] = 1;
+	screenColors[worm->headPosition] = worm->color;
 }
 
 void wormFullStepTail(Worm *worm)
 {
+	// Erase the worm from the tile it just left.
 	screenChars[worm->tailPosition] = 0x00;
 
 	worm->tailPosition += getPositionOffsetForDirection(worm->cellDirectionsBuffer[worm->cells.begin]);
