@@ -17,10 +17,23 @@ src_files := \
 	src/circular-buffer.h \
 	src/circular-buffer.test.c \
 	src/circular-buffer.test.h \
+	src/coord.c \
+	src/coord.h \
+	src/coord.test.c \
+	src/coord.test.h \
+	src/screen-buffer.test.c \
+	src/screen.c \
+	src/screen.h \
+	src/worm.c \
+	src/worm.h \
+	src/worm.test.c \
+	src/worm.test.h \
+	src/test/custom-asserts.c \
+	src/test/custom-asserts.h \
 
 .DELETE_ON_ERROR:
 $(prg): test-makefile $(src_files)
-	$(oscar64) -o=$(prg) -i=$(inc) -strict $(src_files) -e
+	$(oscar64) -o=$(prg) -i=$(inc) -strict $(src_files) -dTEST -e
 
 .PHONY: clean
 clean:
