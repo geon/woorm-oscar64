@@ -2,6 +2,7 @@
 #include "circular-buffer.h"
 #include "direction.h"
 #include "screen.h"
+#include "worm-char.h"
 
 void wormPushDirection(uint8_t wormIndex, Direction direction)
 {
@@ -16,11 +17,12 @@ void wormInit(uint8_t wormIndex, uint16_t pos, Direction direction, void *contro
 	wormTailPosition[wormIndex] = pos - getPositionOffsetForDirection(direction) * 3;
 	wormController[wormIndex] = controller;
 	wormControllerGetDirection[wormIndex] = controllerGetDirection;
-	wormHeadMicroStep[wormIndex] = 0;
+	wormHeadMicroStep[wormIndex] = 3;
 	wormTailMicroStep[wormIndex] = 0;
 	wormSpeed[wormIndex] = 16;
 	circularBufferInit(&wormCells[wormIndex].begin, &wormCells[wormIndex].end);
 
+	wormPushDirection(wormIndex, direction);
 	wormPushDirection(wormIndex, direction);
 	wormPushDirection(wormIndex, direction);
 	wormPushDirection(wormIndex, direction);
@@ -37,7 +39,7 @@ void wormDraw(uint8_t wormIndex)
 	screenColors[position] = color;
 
 	uint8_t iterator;
-	circularBufferForEach(wormCells[wormIndex].begin, wormCells[wormIndex].end, iterator)
+	circularBufferForEach(wormCells[wormIndex].begin, wormCells[wormIndex].end - 1, iterator)
 	{
 		const Direction direction = wormCellDirectionsBuffer[wormIndex][iterator];
 		position += getPositionOffsetForDirection(direction);
@@ -49,13 +51,10 @@ void wormDraw(uint8_t wormIndex)
 
 void wormFullStepHead(uint8_t wormIndex)
 {
-	Direction direction = wormControllerGetDirection[wormIndex](wormController[wormIndex]);
+	Direction direction = wormCellDirectionsBuffer[wormIndex][wormCells[wormIndex].end];
 	wormHeadPosition[wormIndex] += getPositionOffsetForDirection(direction);
 	wormPushDirection(wormIndex, direction);
-
-	// Draw the worm in the tile it just entered.
-	screenChars[wormHeadPosition[wormIndex]] = 1;
-	screenColors[wormHeadPosition[wormIndex]] = playerColors[wormIndex];
+	wormCellDirectionsBuffer[wormIndex][wormCells[wormIndex].end] = wormControllerGetDirection[wormIndex](wormController[wormIndex]);
 }
 
 void wormFullStepTail(uint8_t wormIndex)
@@ -63,9 +62,9 @@ void wormFullStepTail(uint8_t wormIndex)
 	// Erase the worm from the tile it just left.
 	screenChars[wormTailPosition[wormIndex]] = 0x00;
 
-	wormTailPosition[wormIndex] += getPositionOffsetForDirection(wormCellDirectionsBuffer[wormIndex][wormCells[wormIndex].begin]);
 	uint8_t segmentIndex;
 	circularBufferPop(&wormCells[wormIndex].begin, wormCells[wormIndex].end, &segmentIndex);
+	wormTailPosition[wormIndex] += getPositionOffsetForDirection(wormCellDirectionsBuffer[wormIndex][wormCells[wormIndex].begin]);
 }
 
 void wormMicroStepHead(uint8_t wormIndex, uint8_t numMicroSteps)
@@ -77,7 +76,30 @@ void wormMicroStepHead(uint8_t wormIndex, uint8_t numMicroSteps)
 	if (overflowed)
 	{
 		wormFullStepHead(wormIndex);
+		// Overflowed into new tile, so color it.
+		screenColors[wormHeadPosition[wormIndex]] = playerColors[wormIndex] + 8;
 	}
+
+	// Head:
+	// Zero index is the first visible tile, and index 3 is completely filled.
+	// On overflow, the head immediately occupies 2 pixels in the new tile.
+
+	// End:
+	// Zero index is full, and index 3 is the last visible tile. Reverse of the head.
+	// On overflow, the end tile used to only occupy 2 pixels, and is erased.
+
+	// Draw the worm.
+	screenChars[wormHeadPosition[wormIndex]] = charsetLookup[wormCharPackBits(
+		WormCharPlacement_head,
+		wormCellDirectionsBuffer[wormIndex][(uint8_t)(wormCells[wormIndex].end - 1)],
+		wormCellDirectionsBuffer[wormIndex][(uint8_t)(wormCells[wormIndex].end - 0)],
+		wormHeadMicroStep[wormIndex])];
+
+	screenChars[wormHeadPosition[wormIndex] - getPositionOffsetForDirection(wormCellDirectionsBuffer[wormIndex][(uint8_t)(wormCells[wormIndex].end - 1)])] = charsetLookup[wormCharPackBits(
+		WormCharPlacement_after_head,
+		wormCellDirectionsBuffer[wormIndex][(uint8_t)(wormCells[wormIndex].end - 2)],
+		wormCellDirectionsBuffer[wormIndex][(uint8_t)(wormCells[wormIndex].end - 1)],
+		wormHeadMicroStep[wormIndex])];
 }
 
 void wormMicroStepTail(uint8_t wormIndex, uint8_t numMicroSteps)
@@ -90,6 +112,19 @@ void wormMicroStepTail(uint8_t wormIndex, uint8_t numMicroSteps)
 	{
 		wormFullStepTail(wormIndex);
 	}
+
+	// Draw the worm.
+	screenChars[wormTailPosition[wormIndex]] = charsetLookup[wormCharPackBits(
+		WormCharPlacement_end,
+		wormCellDirectionsBuffer[wormIndex][(uint8_t)(wormCells[wormIndex].begin + 0)],
+		wormCellDirectionsBuffer[wormIndex][(uint8_t)(wormCells[wormIndex].begin + 1)],
+		wormTailMicroStep[wormIndex])];
+
+	screenChars[wormTailPosition[wormIndex] + getPositionOffsetForDirection(wormCellDirectionsBuffer[wormIndex][(uint8_t)(wormCells[wormIndex].begin + 1)])] = charsetLookup[wormCharPackBits(
+		WormCharPlacement_before_end,
+		wormCellDirectionsBuffer[wormIndex][(uint8_t)(wormCells[wormIndex].begin + 1)],
+		wormCellDirectionsBuffer[wormIndex][(uint8_t)(wormCells[wormIndex].begin + 2)],
+		wormTailMicroStep[wormIndex])];
 }
 
 void wormStep(uint8_t wormIndex)

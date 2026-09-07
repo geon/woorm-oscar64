@@ -20,12 +20,14 @@ src_files := \
 	src/worm.h \
 	src/circular-buffer.c \
 	src/circular-buffer.h \
+	src/worm-char.c \
+	src/worm-char.h \
 
 .PHONY: verify
 verify: clean test $(prg)
 
 .DELETE_ON_ERROR:
-$(prg): Makefile $(src_files)
+$(prg): Makefile $(src_files) src/worm-charset.inc
 	$(oscar64) -o=$(prg) -i=$(inc) -strict $(src_files)
 
 .PHONY: clean
