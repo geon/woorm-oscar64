@@ -32,7 +32,13 @@ void setup(void)
 	cia_init();
 	// Unmap basic/kernal/rom-charsets.
 	mmap_set(MMAP_NO_ROM);
-	vic_setmode(VICM_TEXT, screenChars, charset);
+	vic_setmode(VICM_TEXT_MC, screenChars, charset);
+
+	vic.color_border = VCOL_BLACK;
+	vic.color_back = VCOL_BLACK;
+
+	vic.color_back1 = VCOL_WHITE;
+	vic.color_back2 = VCOL_BROWN;
 }
 
 int main()
