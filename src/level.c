@@ -1,5 +1,6 @@
 #include "level.h"
 #include "path-controller.h"
+#include <c64/joystick.h>
 #include <c64/vic.h>
 
 void levelLoad(const Level *level)

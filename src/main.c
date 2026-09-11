@@ -1,8 +1,10 @@
+#include "../levels/generated/levels.h"
 #include "direction.h"
 #include "level.h"
 #include "screen.h"
 #include "title-screen.h"
 #include <c64/cia.h>
+#include <c64/joystick.h>
 #include <c64/memmap.h>
 #include <c64/vic.h>
 #include <stdint.h>
@@ -55,6 +57,30 @@ int main()
 	setup();
 	screenClear(0);
 	titleScreen();
+
+	uint8_t levelIndex = 0;
+	for (;;)
+	{
+		screenClear(0);
+		levelStart(levels[levelIndex], 4);
+
+		for (;;)
+		{
+			vic_waitFrame();
+
+			joy_poll(0);
+			if (joyb[0])
+			{
+				break;
+			}
+		}
+
+		++levelIndex;
+		if (levelIndex >= NUM_LEVELS)
+		{
+			levelIndex = 0;
+		}
+	}
 
 	return 0;
 }

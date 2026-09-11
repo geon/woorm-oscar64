@@ -58,5 +58,11 @@ void titleScreen(void)
 			wormStep(wormIndex);
 			vic.color_border = VCOL_BLACK;
 		}
+
+		joy_poll(0);
+		if (joyb[0])
+		{
+			break;
+		}
 	}
 }
