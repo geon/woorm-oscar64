@@ -52,12 +52,11 @@ void titleScreen(void)
 	{
 		vic_waitFrame();
 
-		vic.color_border = playerColors[0];
-		wormStep(0);
-		vic.color_border = VCOL_BLACK;
-
-		vic.color_border = playerColors[1];
-		wormStep(1);
-		vic.color_border = VCOL_BLACK;
+		for (uint8_t wormIndex = 0; wormIndex < numWorms; ++wormIndex)
+		{
+			vic.color_border = playerColors[wormIndex];
+			wormStep(wormIndex);
+			vic.color_border = VCOL_BLACK;
+		}
 	}
 }
