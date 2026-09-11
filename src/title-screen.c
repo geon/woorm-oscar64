@@ -69,7 +69,9 @@ void titleScreen(void)
 	{
 		vic_waitFrame();
 
-		wormStep(&worms[0]);
-		wormStep(&worms[1]);
+		for (uint8_t wormIndex = 0; wormIndex < numWorms; ++wormIndex)
+		{
+			wormStep(&worms[wormIndex]);
+		}
 	}
 }
