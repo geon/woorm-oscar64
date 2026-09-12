@@ -22,9 +22,18 @@ src_files := \
 	src/circular-buffer.h \
 	src/worm-char.c \
 	src/worm-char.h \
+	src/coord.c \
+	src/coord.h \
+	levels/generated/levels.c \
+	levels/generated/levels.h \
+	src/level.c \
+	src/level.h \
 
 .PHONY: verify
 verify: clean test $(prg)
+
+levels/generated/levels.c: levels/levels.pe levels/import-from-pe/src/*
+	npm start --prefix levels/import-from-pe
 
 .DELETE_ON_ERROR:
 $(prg): Makefile $(src_files) src/worm-charset.inc

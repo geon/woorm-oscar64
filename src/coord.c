@@ -23,10 +23,3 @@ Coord posToCoord(uint16_t pos)
 	coord.y = (uint8_t)(pos / SCREEN_WIDTH);
 	return coord;
 }
-
-// offsets for Direction_up, Direction_right, Direction_down, Direction_left.
-int8_t offsets[Direction_count] = {-SCREEN_WIDTH, 1, SCREEN_WIDTH, -1};
-int8_t getPositionOffsetForDirection(Direction direction)
-{
-	return offsets[direction];
-}
