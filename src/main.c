@@ -79,7 +79,7 @@ int main()
 				coordToPos(level->playerStarts[wormIndex].position),
 				level->playerStarts[wormIndex].direction,
 				pathControllerGetDirection);
-			wormSpeed[wormIndex] = 10;
+			wormSpeed[wormIndex] = 10 * (wormIndex + 1);
 
 			// Just for initial drawing.
 			wormStep(wormIndex);
