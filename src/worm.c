@@ -60,7 +60,7 @@ bool isValidNextDirection(uint8_t wormIndex, uint16_t nextPosition, Direction ne
 	uint16_t nextNextPosition = nextPosition + getPositionOffsetForDirection(nextDirection);
 
 	bool isOccupied =
-		screenChars[nextPosition] ||
+		// screenChars[nextPosition] ||
 		screenChars[nextNextPosition];
 
 	return !isOccupied;
@@ -94,9 +94,8 @@ void wormFullStepHead(uint8_t wormIndex)
 				nextDirection = (direction + Direction_count - 1) % Direction_count;
 				if (!isValidNextDirection(wormIndex, nextPosition, nextDirection))
 				{
-					// No valid direction, so can't move.
-					wormBlocked[wormIndex] = true;
-					return;
+					// No valid next direction, so just move straight forward.
+					nextDirection = direction;
 				}
 			}
 		}

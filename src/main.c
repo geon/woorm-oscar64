@@ -1,4 +1,5 @@
 #include "../generated/levels/levels.h"
+#include "ai-controller.h"
 #include "direction.h"
 #include "level.h"
 #include "path-controller.h"
@@ -53,8 +54,6 @@ void setup(void)
 	vic.color_back2 = VCOL_BROWN;
 }
 
-Direction paths[4][1];
-
 int main()
 {
 	setup();
@@ -72,13 +71,11 @@ int main()
 
 		for (uint8_t wormIndex = 0; wormIndex < numWorms; ++wormIndex)
 		{
-			paths[wormIndex][0] = level->playerStarts[wormIndex].direction;
-			pathControllerInit(wormIndex, paths[wormIndex], 1);
 			wormInit(
 				wormIndex,
 				coordToPos(level->playerStarts[wormIndex].position),
 				level->playerStarts[wormIndex].direction,
-				pathControllerGetDirection);
+				aiControllerGetDirection);
 			wormSpeed[wormIndex] = 10 * (wormIndex + 1);
 
 			// Just for initial drawing.
