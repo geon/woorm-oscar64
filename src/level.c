@@ -28,12 +28,12 @@ void levelPlay(const Level *level, uint8_t numWorms)
 	{
 		vic_waitFrame();
 
-		// for (uint8_t wormIndex = 0; wormIndex < numWorms; ++wormIndex)
-		// {
-		// 	vic.color_border = playerColors[wormIndex];
-		// 	wormStep(wormIndex);
-		// 	vic.color_border = VCOL_BLACK;
-		// }
+		for (uint8_t wormIndex = 0; wormIndex < numWorms; ++wormIndex)
+		{
+			vic.color_border = playerColors[wormIndex];
+			wormStep(wormIndex);
+			vic.color_border = VCOL_BLACK;
+		}
 
 		joy_poll(0);
 		if (joyb[0])

@@ -53,7 +53,7 @@ void setup(void)
 	vic.color_back2 = VCOL_BROWN;
 }
 
-Direction path[] = {Direction_up};
+Direction paths[4][1];
 
 int main()
 {
@@ -72,11 +72,12 @@ int main()
 
 		for (uint8_t wormIndex = 0; wormIndex < numWorms; ++wormIndex)
 		{
-			pathControllerInit(wormIndex, path, sizeof(path));
+			paths[wormIndex][0] = level->playerStarts[wormIndex].direction;
+			pathControllerInit(wormIndex, paths[wormIndex], 1);
 			wormInit(
 				wormIndex,
 				coordToPos(level->playerStarts[wormIndex].position),
-				level->playerStarts[wormIndex].direction % Direction_count,
+				level->playerStarts[wormIndex].direction,
 				pathControllerGetDirection);
 			wormSpeed[wormIndex] = 10;
 
