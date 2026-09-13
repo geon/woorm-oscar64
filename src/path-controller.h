@@ -7,6 +7,7 @@
 typedef struct PathController
 {
 	Direction *path;
+	uint8_t currentPathStep;
 } PathController;
 
 void pathControllerInit(uint8_t wormIndex, Direction path[], uint8_t pathLength);
