@@ -79,13 +79,14 @@ void wormMicroStepHead(uint8_t wormIndex, uint8_t numMicroSteps)
 {
 	uint8_t old = wormHeadMicroStep[wormIndex];
 	uint8_t new = wormHeadMicroStep[wormIndex] + numMicroSteps;
-	wormHeadMicroStep[wormIndex] = new;
 	bool overflowed = old > new;
 
 	if (overflowed)
 	{
 		wormFullStepHead(wormIndex);
 	}
+
+	wormHeadMicroStep[wormIndex] = new;
 
 	// Head:
 	// Zero index is the first visible tile, and index 3 is completely filled.
