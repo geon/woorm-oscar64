@@ -53,6 +53,15 @@ void wormDraw(Worm *worm)
 	}
 }
 
+bool isValidNextDirection(uint16_t nextPosition, Direction nextDirection)
+{
+	uint16_t nextNextPosition = nextPosition + getPositionOffsetForDirection(nextDirection);
+
+	bool isOccupied = screenChars[nextNextPosition];
+
+	return !isOccupied;
+}
+
 void wormFullStepHead(Worm *worm)
 {
 	Direction direction = worm->cellDirectionsBuffer[circularBufferAtIndexReverse(&worm->cells, 0)];
@@ -64,6 +73,28 @@ void wormFullStepHead(Worm *worm)
 		// Only move forward if the tile is not blocked.
 		worm->state = WormState_blocked;
 		return;
+	}
+
+	// Try the requested direction.
+	if (!isValidNextDirection(nextPosition, nextDirection))
+	{
+		// Otherwise, try forward.
+		nextDirection = direction;
+		if (!isValidNextDirection(nextPosition, nextDirection))
+		{
+			// Or clockwise.
+			nextDirection = (direction + 1) % Direction_count;
+			if (!isValidNextDirection(nextPosition, nextDirection))
+			{
+				// Or counter clockwise.
+				nextDirection = (direction + Direction_count - 1) % Direction_count;
+				if (!isValidNextDirection(nextPosition, nextDirection))
+				{
+					// No valid next direction, so just move straight forward.
+					nextDirection = direction;
+				}
+			}
+		}
 	}
 
 	worm->headPosition = nextPosition;
