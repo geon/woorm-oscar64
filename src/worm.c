@@ -10,10 +10,11 @@ void wormPushDirection(uint8_t wormIndex, Direction direction)
 	wormCellDirectionsBuffer[wormIndex][segmentIndex] = direction;
 }
 
-void wormInit(uint8_t wormIndex, uint16_t pos, Direction direction)
+void wormInit(uint8_t wormIndex, uint16_t pos, Direction direction, WormControllerGetDirection controllerGetDirection)
 {
 	wormHeadPosition[wormIndex] = pos;
 	wormTailPosition[wormIndex] = pos - getPositionOffsetForDirection(direction) * 3;
+	wormControllerGetDirection[wormIndex] = controllerGetDirection;
 	circularBufferInit(&wormCells[wormIndex]);
 
 	wormPushDirection(wormIndex, direction);
@@ -40,4 +41,30 @@ void wormDraw(uint8_t wormIndex)
 		screenChars[position] = 1;
 		screenColors[position] = color;
 	}
+}
+
+void wormFullStepHead(uint8_t wormIndex)
+{
+	Direction direction = wormControllerGetDirection[wormIndex](wormIndex);
+	uint16_t nextPosition = wormHeadPosition[wormIndex] + getPositionOffsetForDirection(direction);
+
+	wormHeadPosition[wormIndex] = nextPosition;
+	wormPushDirection(wormIndex, direction);
+
+	wormDraw(wormIndex);
+}
+
+void wormFullStepTail(uint8_t wormIndex)
+{
+	screenChars[wormTailPosition[wormIndex]] = 0x00;
+
+	wormTailPosition[wormIndex] += getPositionOffsetForDirection(wormCellDirectionsBuffer[wormIndex][wormCells[wormIndex].begin]);
+	uint8_t segmentIndex;
+	circularBufferPop(&wormCells[wormIndex], &segmentIndex);
+}
+
+void wormStep(uint8_t wormIndex)
+{
+	wormFullStepHead(wormIndex);
+	wormFullStepTail(wormIndex);
 }

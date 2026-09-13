@@ -29,7 +29,8 @@ void wormTest(void)
 	{
 		screenClear(0);
 
-		wormInit(wormIndex, coordToPos(coordCreate(1, 1)), Direction_up);
+		void *noControllerGetDirection;
+		wormInit(wormIndex, coordToPos(coordCreate(1, 1)), Direction_up, noControllerGetDirection);
 
 		assertTrue("End", screenChars[coordToPos(coordCreate(1, 4))]);
 		assertTrue("Before end", screenChars[coordToPos(coordCreate(1, 3))]);
