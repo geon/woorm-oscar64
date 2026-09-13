@@ -182,12 +182,17 @@ void wormMicroStepTail(uint8_t wormIndex, uint8_t numMicroSteps)
 		wormTailMicroStep[wormIndex])];
 }
 
+int8_t max(int8_t a, int8_t b)
+{
+	return a > b ? a : b;
+}
+
 void wormStep(uint8_t wormIndex)
 {
-	uint8_t growthRate = 1;
+	uint8_t growthRate = 5;
 	uint8_t headSpeed = wormSpeed[wormIndex];
 	uint8_t blocked = wormBlocked[wormIndex];
-	uint8_t tailSpeed = blocked ? 0 : headSpeed;
+	uint8_t tailSpeed = blocked ? 0 : max(0, headSpeed - growthRate);
 
 	wormMicroStepHead(wormIndex, headSpeed);
 	wormMicroStepTail(wormIndex, tailSpeed);
