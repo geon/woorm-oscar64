@@ -10,6 +10,12 @@ src_files := \
 	src/screen-buffer.c \
 	src/screen.c \
 	src/screen.h \
+	src/direction.c \
+	src/direction.h \
+	src/path-controller.c \
+	src/path-controller.h \
+	src/title-screen.c \
+	src/title-screen.h \
 
 .PHONY: verify
 verify: clean test $(prg)
