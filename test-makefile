@@ -9,6 +9,10 @@ src_files := \
 	src/main.test.c \
 	src/test/test.c \
 	src/test/test.h \
+	src/path-controller.c \
+	src/path-controller.h \
+	src/path-controller.test.c \
+	src/path-controller.test.h \
 
 .DELETE_ON_ERROR:
 $(prg): test-makefile $(src_files)
