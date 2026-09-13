@@ -70,6 +70,20 @@ int main()
 		const Level *level = levels[levelIndex];
 		levelStart(level);
 
+		for (uint8_t wormIndex = 0; wormIndex < numWorms; ++wormIndex)
+		{
+			pathControllerInit(wormIndex, path, sizeof(path));
+			wormInit(
+				wormIndex,
+				coordToPos(level->playerStarts[wormIndex].position),
+				level->playerStarts[wormIndex].direction % Direction_count,
+				pathControllerGetDirection);
+			wormSpeed[wormIndex] = 10;
+
+			// Just for initial drawing.
+			wormStep(wormIndex);
+		}
+
 		levelPlay(level, numWorms);
 
 		++levelIndex;
