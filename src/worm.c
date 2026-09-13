@@ -19,6 +19,7 @@ void wormInit(uint8_t wormIndex, uint16_t pos, Direction direction, WormControll
 	wormHeadMicroStep[wormIndex] = 3;
 	wormTailMicroStep[wormIndex] = 0;
 	wormSpeed[wormIndex] = 16;
+	wormBlocked[wormIndex] = false;
 	circularBufferInit(&wormCells[wormIndex]);
 
 	wormPushDirection(wormIndex, direction);
@@ -60,6 +61,13 @@ void wormFullStepHead(uint8_t wormIndex)
 	uint16_t nextPosition = wormHeadPosition[wormIndex] + getPositionOffsetForDirection(direction);
 	Direction nextDirection = wormControllerGetDirection[wormIndex](wormIndex);
 
+	if (screenChars[nextPosition])
+	{
+		// Only move forward if the tile is not blocked.
+		wormBlocked[wormIndex] = true;
+		return;
+	}
+
 	wormHeadPosition[wormIndex] = nextPosition;
 	wormPushDirection(wormIndex, nextDirection);
 	screenColors[nextPosition] = playerColors[wormIndex] + 8;
@@ -84,6 +92,11 @@ void wormMicroStepHead(uint8_t wormIndex, uint8_t numMicroSteps)
 	if (overflowed)
 	{
 		wormFullStepHead(wormIndex);
+	}
+
+	if (wormBlocked[wormIndex])
+	{
+		return;
 	}
 
 	wormHeadMicroStep[wormIndex] = new;
@@ -140,7 +153,8 @@ void wormStep(uint8_t wormIndex)
 {
 	uint8_t growthRate = 1;
 	uint8_t headSpeed = wormSpeed[wormIndex];
-	uint8_t tailSpeed = headSpeed;
+	uint8_t blocked = wormBlocked[wormIndex];
+	uint8_t tailSpeed = blocked ? 0 : headSpeed;
 
 	wormMicroStepHead(wormIndex, headSpeed);
 	wormMicroStepTail(wormIndex, tailSpeed);

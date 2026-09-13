@@ -15,6 +15,7 @@ WormControllerGetDirection wormControllerGetDirection[NUM_WORMS];
 uint8_t wormHeadMicroStep[NUM_WORMS];
 uint8_t wormTailMicroStep[NUM_WORMS];
 uint8_t wormSpeed[NUM_WORMS];
+bool wormBlocked[NUM_WORMS];
 CircularBuffer wormCells[NUM_WORMS];
 Direction wormCellDirectionsBuffer[NUM_WORMS][0x100];
 #pragma align(wormCellDirectionsBuffer, 256)
