@@ -1,6 +1,7 @@
 #include "../generated/levels/levels.h"
 #include "direction.h"
 #include "level.h"
+#include "path-controller.h"
 #include "screen.h"
 #include "title-screen.h"
 #include <c64/cia.h>
@@ -52,6 +53,8 @@ void setup(void)
 	vic.color_back2 = VCOL_BROWN;
 }
 
+Direction path[] = {Direction_up};
+
 int main()
 {
 	setup();
@@ -61,20 +64,13 @@ int main()
 	uint8_t levelIndex = 0;
 	for (;;)
 	{
+
 		screenClear(0);
+		uint8_t numWorms = 4;
 		const Level *level = levels[levelIndex];
 		levelStart(level);
 
-		for (;;)
-		{
-			vic_waitFrame();
-
-			joy_poll(0);
-			if (joyb[0])
-			{
-				break;
-			}
-		}
+		levelPlay(level, numWorms);
 
 		++levelIndex;
 		if (levelIndex >= NUM_LEVELS)

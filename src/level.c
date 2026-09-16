@@ -21,3 +21,17 @@ void levelStart(const Level *level)
 	levelSetMultiColors(level);
 	levelLoad(level);
 }
+
+void levelPlay(const Level *level, uint8_t numWorms)
+{
+	for (;;)
+	{
+		vic_waitFrame();
+
+		joy_poll(0);
+		if (joyb[0])
+		{
+			break;
+		}
+	}
+}

@@ -27,5 +27,6 @@ typedef struct Level
 void levelLoad(const Level *level);
 void levelSetMultiColors(const Level *level);
 void levelStart(const Level *level);
+void levelPlay(const Level *level, uint8_t numWorms);
 
 #endif
