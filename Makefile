@@ -20,9 +20,16 @@ src_files := \
 	src/worm.h \
 	src/circular-buffer.c \
 	src/circular-buffer.h \
+	src/coord.c \
+	src/coord.h \
+	generated/levels/levels.c \
+	generated/levels/levels.h \
 
 .PHONY: verify
 verify: clean test $(prg)
+
+generated/levels/levels.c: assets/levels.pe import/src/*
+	npm start --prefix import
 
 .DELETE_ON_ERROR:
 $(prg): Makefile $(src_files)
