@@ -1,4 +1,5 @@
 #include "circular-buffer.test.h"
+#include "coord.test.h"
 #include "path-controller.test.h"
 #include "test/test.h"
 
@@ -9,6 +10,7 @@ int main()
 
 	pathControllerTest();
 	circularBufferTest();
+	coordTest();
 
 	afterTests();
 
