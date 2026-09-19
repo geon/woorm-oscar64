@@ -45,6 +45,8 @@ void titleScreen(void)
 	wormInit(1, coordToPos(level_title_screen.playerStarts[1].position), level_title_screen.playerStarts[1].direction, pathControllerGetDirection);
 	wormSpeed[0] = 255;
 	wormSpeed[1] = 64;
+	wormTailSpeed[0] = wormSpeed[0];
+	wormTailSpeed[1] = wormSpeed[1];
 
 	for (;;)
 	{

@@ -76,7 +76,9 @@ int main()
 				coordToPos(level->playerStarts[wormIndex].position),
 				level->playerStarts[wormIndex].direction,
 				aiControllerGetDirection);
+			// TODO: Use setters.
 			wormSpeed[wormIndex] = 10 * (wormIndex + 1);
+			wormTailSpeed[wormIndex] = wormSpeed[wormIndex] - 5;
 
 			// Just for initial drawing.
 			wormStep(wormIndex);

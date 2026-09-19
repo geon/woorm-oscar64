@@ -19,6 +19,7 @@ void wormInit(uint8_t wormIndex, uint16_t pos, Direction direction, WormControll
 	wormHeadMicroStep[wormIndex] = 3;
 	wormTailMicroStep[wormIndex] = 0;
 	wormSpeed[wormIndex] = 16;
+	wormTailSpeed[wormIndex] = wormSpeed[wormIndex] + 1;
 	wormBlocked[wormIndex] = false;
 	circularBufferInit(&wormCells[wormIndex]);
 
@@ -189,11 +190,16 @@ int8_t max(int8_t a, int8_t b)
 
 void wormStep(uint8_t wormIndex)
 {
-	uint8_t growthRate = 5;
 	uint8_t headSpeed = wormSpeed[wormIndex];
-	uint8_t blocked = wormBlocked[wormIndex];
-	uint8_t tailSpeed = blocked ? 0 : max(0, headSpeed - growthRate);
+	uint8_t tailSpeed = wormTailSpeed[wormIndex];
 
-	wormMicroStepHead(wormIndex, headSpeed);
-	wormMicroStepTail(wormIndex, tailSpeed);
+	if (!wormBlocked[wormIndex])
+	{
+		wormMicroStepHead(wormIndex, headSpeed);
+		wormMicroStepTail(wormIndex, tailSpeed);
+	}
 }
+
+// void setSpeed(){
+// 	  uint8_t tailSpeed = blocked ? 0 : max(0, headSpeed - growthRate);
+// }
