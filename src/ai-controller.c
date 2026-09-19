@@ -5,6 +5,7 @@
 Direction aiControllerGetDirection(uint8_t wormIndex)
 {
 	// Just keep moving forwards.
-	Direction direction = wormCellDirectionsBuffer[wormIndex][(uint8_t)(wormCells[wormIndex].end - 1)];
+	Direction direction = wormCellDirectionsBuffer[wormIndex][wormCells[wormIndex].end - 1];
+
 	return direction;
 }
