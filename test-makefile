@@ -23,6 +23,15 @@ src_files := \
 	src/coord.test.h \
 	src/test/custom-asserts.c \
 	src/test/custom-asserts.h \
+	src/screen-buffer.test.c \
+	src/screen.c \
+	src/screen.h \
+	src/worm.c \
+	src/worm.h \
+	src/worm.test.c \
+	src/worm.test.h \
+	src/direction.c \
+	src/direction.h \
 
 .DELETE_ON_ERROR:
 $(prg): test-makefile $(src_files)
