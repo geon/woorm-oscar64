@@ -22,7 +22,7 @@
 // Store the charset in the "charset" section.
 #pragma data(charset)
 char charset[2048] = {
-#include "worm-charset.inc"
+#embed "../generated/charset.bin"
 };
 // End "charset" section.
 #pragma data(data)
