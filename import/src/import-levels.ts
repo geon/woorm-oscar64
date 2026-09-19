@@ -43,8 +43,12 @@ ${playerStarts}
 `;
 }
 
-function writeLevelBins(generatedFolderPath: string, level: Level) {
-	const optimized = optimizeLevel(level);
+function writeLevelBins(
+	generatedFolderPath: string,
+	level: Level,
+	charsetStaticSize: number,
+) {
+	const optimized = optimizeLevel(level, charsetStaticSize);
 
 	const levelFileName = getLevelFileName(level);
 
@@ -66,7 +70,7 @@ function getLevelFileName(level: Level): string {
 	return level.name.toLowerCase().replaceAll(" ", "_").replaceAll("&", "n");
 }
 
-export function importLevels() {
+export function importLevels(charsetStaticSize: number) {
 	const __dirname = import.meta.dirname;
 	const generatedFolderPath = __dirname + "/../../generated/levels";
 
@@ -85,7 +89,7 @@ export function importLevels() {
 	}
 
 	for (const level of levels) {
-		writeLevelBins(generatedFolderPath, level);
+		writeLevelBins(generatedFolderPath, level, charsetStaticSize);
 	}
 
 	writeFileSync(

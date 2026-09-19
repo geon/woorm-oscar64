@@ -1,11 +1,13 @@
 #include "level.h"
+#include "../generated/charset-static-size.h"
 #include "path-controller.h"
 #include <c64/joystick.h>
 #include <c64/vic.h>
 
 void levelLoad(const Level *level)
 {
-	oscar_expand_lzo((uint8_t *)0x2000, level->charset);
+	// The dynamic per-level chars must be loaded after the statically allocated chars.
+	oscar_expand_lzo((uint8_t *)(0x2000 + CHARSET_STATIC_SIZE * 8), level->charset);
 	oscar_expand_lzo(screenColors, level->colors);
 	oscar_expand_lzo(screenChars, level->chars);
 }

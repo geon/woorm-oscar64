@@ -1,5 +1,7 @@
 import { mkdirSync, readFileSync, writeFileSync } from "fs";
 import { deserializePeFileData } from "./pe/pe-file";
+import { charEquals, type Char } from "./char";
+import { charsetCompress } from "./charset";
 
 const placementLayout = [
 	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -130,6 +132,8 @@ function getCharsetLookup() {
 	return charsetLookup;
 }
 
+const blankChar: Char = [0, 0, 0, 0, 0, 0, 0, 0];
+
 function getWormCharset() {
 	const __dirname = import.meta.dirname;
 
@@ -144,10 +148,24 @@ function getWormCharset() {
 		throw new Error("Missing worm charset.");
 	}
 
-	return unpackedWormCharset;
+	const usedChars = new Set(
+		unpackedWormCharset
+			.map((char, index) => ({ char, index }))
+			.filter(({ char }) => !charEquals(char, blankChar))
+			.map(({ index }) => index),
+	);
+	// For the empty tile.
+	usedChars.add(0);
+
+	const wormCharset = charsetCompress(unpackedWormCharset, usedChars);
+	if (!wormCharset) {
+		throw new Error("Failed to compress wormCharset.");
+	}
+
+	return wormCharset;
 }
 
-export function importWormCharset() {
+export function importWormCharset(): number {
 	const __dirname = import.meta.dirname;
 	const generatedFolderPath = __dirname + "/../../generated";
 
@@ -157,13 +175,33 @@ export function importWormCharset() {
 		if (error.code !== "EEXIST") throw error;
 	}
 
+	const wormCharset = getWormCharset();
+	const charsetStaticSize = wormCharset.compressedCharset.length;
+	const charsetLookup = getCharsetLookup().map(
+		(target) => wormCharset.mappingTable[target]!,
+	);
+
 	writeFileSync(
 		generatedFolderPath + `/worm-charset-lookup.bin`,
-		new Uint8Array(getCharsetLookup()),
+		new Uint8Array(charsetLookup),
 	);
 
 	writeFileSync(
 		generatedFolderPath + `/charset.bin`,
-		new Uint8Array(getWormCharset().flat()),
+		new Uint8Array(wormCharset.compressedCharset.flat()),
 	);
+
+	writeFileSync(
+		generatedFolderPath + `/charset-static-size.h`,
+		`
+#define CHARSET_STATIC_SIZE ${charsetStaticSize}
+		`,
+	);
+
+	// writeFileSync(
+	// 	generatedFolderPath + `/charset.dec`,
+	// 	wormCharset.compressedCharset.flat().join(","),
+	// );
+
+	return charsetStaticSize;
 }

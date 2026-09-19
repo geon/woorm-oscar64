@@ -2,7 +2,7 @@ import { multiColorCharHasPrimaryColor } from "./char.js";
 import { charsetCompress } from "./charset.js";
 import type { Level } from "./Level.js";
 
-export function optimizeLevel(level: Level): Level {
+export function optimizeLevel(level: Level, charsetStaticSize: number): Level {
 	const compressed = charsetCompress(level.charset, new Set(level.chars));
 	if (!compressed) {
 		throw new Error("Failed to compress charset.");
@@ -12,7 +12,14 @@ export function optimizeLevel(level: Level): Level {
 	return {
 		...level,
 		colors: removeInvisibleColorChanges(level),
-		chars: remapChars(level.chars, mappingTable),
+		chars: remapChars(
+			level.chars,
+			mappingTable.map((target) =>
+				// Add the charsetStaticSize to the char index, so the per-level chars can be loaded after the static portion.
+				// The zero-index means empty space, so must be preserved.
+				target === 0 ? 0 : target + charsetStaticSize,
+			),
+		),
 		charset: compressedCharset,
 	};
 }
