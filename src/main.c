@@ -1,4 +1,5 @@
 #include "direction.h"
+#include "level.h"
 #include "screen.h"
 #include "title-screen.h"
 #include <c64/cia.h>

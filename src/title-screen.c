@@ -1,11 +1,12 @@
+#include "../generated/levels/levels.h"
+#include "coord.h"
+#include "level.h"
 #include "path-controller.h"
 #include "screen.h"
 #include "worm.h"
 #include <c64/vic.h>
+#include <oscar.h>
 #include <stdint.h>
-
-uint16_t pathStartA = 40 * 10 + 10;
-uint16_t pathStartB = 40 * 10 + 40 - 1 - 10;
 
 Direction pathA[] = {
 	Direction_right,
@@ -32,11 +33,16 @@ Direction pathB[] = {
 
 void titleScreen(void)
 {
+	extern const Level level_title_screen;
+
+	uint8_t numWorms = 2;
+	levelStart(&level_title_screen);
+
 	pathControllerInit(0, pathA, sizeof(pathA));
 	pathControllerInit(1, pathB, sizeof(pathB));
 
-	wormInit(0, pathStartA, Direction_up, pathControllerGetDirection);
-	wormInit(1, pathStartB, Direction_up, pathControllerGetDirection);
+	wormInit(0, coordToPos(level_title_screen.playerStarts[0].position), level_title_screen.playerStarts[0].direction, pathControllerGetDirection);
+	wormInit(1, coordToPos(level_title_screen.playerStarts[1].position), level_title_screen.playerStarts[1].direction, pathControllerGetDirection);
 	wormSpeed[0] = 255;
 	wormSpeed[1] = 64;
 
