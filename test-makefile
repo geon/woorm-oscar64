@@ -35,7 +35,7 @@ src_files := \
 
 .DELETE_ON_ERROR:
 $(prg): test-makefile $(src_files)
-	$(oscar64) -o=$(prg) -i=$(inc) -strict $(src_files) -e
+	$(oscar64) -o=$(prg) -i=$(inc) -strict $(src_files) -dTEST -e
 
 .PHONY: clean
 clean:
