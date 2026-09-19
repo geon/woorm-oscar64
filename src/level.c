@@ -1,5 +1,6 @@
 #include "level.h"
 #include "../generated/charset-static-size.h"
+#include <c64/joystick.h>
 #include <c64/vic.h>
 
 void levelLoad(const Level *level)
@@ -20,4 +21,18 @@ void levelStart(const Level *level)
 {
 	levelSetMultiColors(level);
 	levelLoad(level);
+}
+
+void levelPlay(const Level *level, uint8_t numWorms)
+{
+	for (;;)
+	{
+		vic_waitFrame();
+
+		joy_poll(0);
+		if (joyb[0])
+		{
+			break;
+		}
+	}
 }

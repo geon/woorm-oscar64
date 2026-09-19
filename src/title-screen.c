@@ -54,5 +54,11 @@ void titleScreen(void)
 		{
 			wormStep(wormIndex);
 		}
+
+		joy_poll(0);
+		if (joyb[0])
+		{
+			break;
+		}
 	}
 }

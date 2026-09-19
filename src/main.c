@@ -1,8 +1,10 @@
+#include "../generated/levels/levels.h"
 #include "direction.h"
 #include "level.h"
 #include "screen.h"
 #include "title-screen.h"
 #include <c64/cia.h>
+#include <c64/joystick.h>
 #include <c64/memmap.h>
 #include <c64/vic.h>
 #include <stdint.h>
@@ -55,6 +57,24 @@ int main()
 	setup();
 	screenClear(0);
 	titleScreen();
+
+	uint8_t levelIndex = 0;
+	for (;;)
+	{
+
+		screenClear(0);
+		uint8_t numWorms = 4;
+		const Level *level = levels[levelIndex];
+		levelStart(level);
+
+		levelPlay(level, numWorms);
+
+		++levelIndex;
+		if (levelIndex >= NUM_LEVELS)
+		{
+			levelIndex = 0;
+		}
+	}
 
 	return 0;
 }
