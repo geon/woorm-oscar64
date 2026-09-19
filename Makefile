@@ -28,7 +28,7 @@ src_files := \
 .PHONY: verify
 verify: clean test $(prg)
 
-generated/charset.bin generated/levels/levels.c: import/src/* assets/levels.pe
+generated/charset.bin generated/levels/levels.c: assets/worm-charset.pe import/src/* assets/levels.pe
 	npm start --prefix import
 
 .DELETE_ON_ERROR:
