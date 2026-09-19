@@ -1,7 +1,11 @@
 import { mkdirSync, writeFileSync } from "fs";
 import { importLevels } from "./import-levels.js";
-import { type Charset } from "./charset.js";
-import { blankChar, fullChar } from "./char.js";
+import {
+	getWormCharsetLookup,
+	importWormCharset,
+} from "./import-worm-charset.js";
+import { charsetCompress, type Charset } from "./charset.js";
+import { blankChar, charEquals } from "./char.js";
 
 function main() {
 	const __dirname = import.meta.dirname;
@@ -16,8 +20,30 @@ function main() {
 	let staticCharset: Charset = [
 		// blankChar must be at index 0 for collission detection.
 		blankChar,
-		fullChar,
 	];
+
+	const unpackedWormCharset = importWormCharset();
+	const usedCharsWorm = new Set(
+		unpackedWormCharset
+			.map((char, index) => ({ char, index }))
+			.filter(({ char }) => !charEquals(char, blankChar))
+			.map(({ index }) => index),
+	);
+	const wormCharset = charsetCompress(
+		unpackedWormCharset,
+		usedCharsWorm,
+		staticCharset,
+	);
+	staticCharset = wormCharset.compressedCharset;
+
+	const wormCharsetLookup = getWormCharsetLookup();
+
+	writeFileSync(
+		generatedFolderPath + `/worm-charset-lookup.bin`,
+		new Uint8Array(
+			wormCharsetLookup.map((target) => wormCharset.mappingTable[target]!),
+		),
+	);
 
 	writeFileSync(
 		generatedFolderPath + `/charset.bin`,
