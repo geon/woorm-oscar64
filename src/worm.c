@@ -2,6 +2,7 @@
 #include "circular-buffer.h"
 #include "direction.h"
 #include "screen.h"
+#include <c64/vic.h>
 
 void wormPushDirection(uint8_t wormIndex, Direction direction)
 {
@@ -65,6 +66,10 @@ void wormFullStepTail(uint8_t wormIndex)
 
 void wormStep(uint8_t wormIndex)
 {
+	vic.color_border = playerColors[wormIndex];
+
 	wormFullStepHead(wormIndex);
 	wormFullStepTail(wormIndex);
+
+	vic.color_border = VCOL_BLACK;
 }
