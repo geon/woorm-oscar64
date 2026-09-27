@@ -23,3 +23,11 @@ Coord coordFromPos(uint16_t pos)
 	coord.y = (int8_t)(pos / SCREEN_WIDTH);
 	return coord;
 }
+
+Coord coordAdd(Coord a, Coord b)
+{
+	return (Coord){
+		a.x + b.x,
+		a.y + b.y,
+	};
+}

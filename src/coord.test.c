@@ -19,5 +19,12 @@ void coordTest(void)
 		assertWordDecimal("coordToPos 1", coordToPos(coordFromPos(0)), 0);
 		assertWordDecimal("coordToPos 2", coordToPos(coordFromPos(49)), 49);
 	}
+
+	beginTest("Add coords.");
+	{
+		assertCoord("Positive", coordAdd(coordCreate(5, 5), coordCreate(5, 5)), coordCreate(10, 10));
+		assertCoord("Zero", coordAdd(coordCreate(5, 5), coordCreate(-5, -5)), coordCreate(0, 0));
+		assertCoord("Negative", coordAdd(coordCreate(5, 5), coordCreate(-15, -15)), coordCreate(-10, -10));
+	}
 	endTest();
 }
