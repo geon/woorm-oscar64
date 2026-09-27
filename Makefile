@@ -10,8 +10,11 @@ src_files := src/main.c
 .PHONY: verify
 verify: clean test $(prg)
 
+generated/charset.bin: import/src/*
+	npm start --prefix import
+
 .DELETE_ON_ERROR:
-$(prg): Makefile $(src_files)
+$(prg): Makefile generated/charset.bin $(src_files)
 	$(oscar64) -o=$(prg) -i=$(inc) -strict $(src_files)
 
 .PHONY: clean
