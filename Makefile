@@ -20,11 +20,15 @@ src_files := \
 	src/worm.h \
 	src/circular-buffer.c \
 	src/circular-buffer.h \
+	src/coord.c \
+	src/coord.h \
+	generated/levels/levels.c \
+	generated/levels/levels.h \
 
 .PHONY: verify
 verify: clean test $(prg)
 
-generated/charset.bin: import/src/*
+generated/charset.bin generated/levels/levels.c: import/src/* assets/levels.pe
 	npm start --prefix import
 
 .DELETE_ON_ERROR:
