@@ -42,4 +42,10 @@ void coordTest(void)
 		assertCoord("Negative", coordScale(coordCreate(5, 5), -2), coordCreate(-10, -10));
 	}
 	endTest();
+
+	beginTest("coordFromDirection");
+	{
+		assertCoord("Right", coordFromDirection(Direction_right), coordCreate(1, 0));
+	}
+	endTest();
 }

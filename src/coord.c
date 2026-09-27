@@ -24,6 +24,21 @@ Coord coordFromPos(uint16_t pos)
 	return coord;
 }
 
+Coord coordFromDirection(Direction direction)
+{
+	switch (direction)
+	{
+		case Direction_up:
+			return (Coord){0, -1};
+		case Direction_down:
+			return (Coord){0, 1};
+		case Direction_left:
+			return (Coord){-1, 0};
+		case Direction_right:
+			return (Coord){1, 0};
+	}
+}
+
 Coord coordAdd(Coord a, Coord b)
 {
 	return (Coord){
