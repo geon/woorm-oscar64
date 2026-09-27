@@ -26,5 +26,12 @@ void coordTest(void)
 		assertCoord("Zero", coordAdd(coordCreate(5, 5), coordCreate(-5, -5)), coordCreate(0, 0));
 		assertCoord("Negative", coordAdd(coordCreate(5, 5), coordCreate(-15, -15)), coordCreate(-10, -10));
 	}
+
+	beginTest("Subtract coords.");
+	{
+		assertCoord("Positive", coordSubtract(coordCreate(15, 15), coordCreate(5, 5)), coordCreate(10, 10));
+		assertCoord("Zero", coordSubtract(coordCreate(5, 5), coordCreate(5, 5)), coordCreate(0, 0));
+		assertCoord("Negative", coordSubtract(coordCreate(5, 5), coordCreate(15, 15)), coordCreate(-10, -10));
+	}
 	endTest();
 }
