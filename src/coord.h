@@ -14,5 +14,6 @@ Coord coordCreate(int8_t x, int8_t y);
 uint16_t coordToPos(Coord coord);
 Coord coordFromPos(uint16_t pos);
 Coord coordAdd(Coord a, Coord b);
+Coord coordSubtract(Coord a, Coord b);
 
 #endif

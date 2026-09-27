@@ -31,3 +31,11 @@ Coord coordAdd(Coord a, Coord b)
 		a.y + b.y,
 	};
 }
+
+Coord coordSubtract(Coord a, Coord b)
+{
+	return (Coord){
+		a.x - b.x,
+		a.y - b.y,
+	};
+}
