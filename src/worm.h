@@ -8,6 +8,15 @@
 
 #define NUM_WORMS 4
 
+typedef enum WormState
+{
+	WormState_first,
+	WormState_alive = 0,
+	WormState_blocked,
+	WormState_count
+} WormState;
+
+WormState wormState[NUM_WORMS];
 uint16_t wormHeadPosition[NUM_WORMS];
 uint16_t wormTailPosition[NUM_WORMS];
 ControllerGetDirection wormControllerGetDirection[NUM_WORMS];

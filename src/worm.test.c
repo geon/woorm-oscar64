@@ -18,9 +18,15 @@ void printScreen()
 	printf("\n");
 }
 
+Direction upController(uint8_t wormImdex)
+{
+	return Direction_up;
+}
+
 const uint8_t playerColors[4] = {1, 2, 3, 4};
 
 bool Tile_filled = true;
+uint8_t wall = 0xff;
 
 uint8_t wormIndex = 0;
 
@@ -36,6 +42,21 @@ void wormTest(void)
 		assertTrue("Before end", screenChars[coordToPos(coordCreate(1, 3))]);
 		assertTrue("After head", screenChars[coordToPos(coordCreate(1, 2))]);
 		assertTrue("Head", screenChars[coordToPos(coordCreate(1, 1))]);
+	}
+	endTest();
+
+	beginTest("A worm stops when blocked.");
+	{
+		screenClear(0);
+
+		wormInit(wormIndex, coordToPos(coordCreate(3, 3)), Direction_up, upController);
+		// Block the path of the worm.
+		screenChars[coordToPos(coordCreate(3, 2))] = wall;
+		// Force a full step.
+		wormSpeed[wormIndex] = 0xff;
+		wormStep(wormIndex);
+
+		assertByte("The wall is still there.", screenChars[coordToPos(coordCreate(3, 2))], wall);
 	}
 	endTest();
 }
