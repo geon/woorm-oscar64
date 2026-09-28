@@ -1,4 +1,5 @@
 #include "../generated/levels/levels.h"
+#include "controller.h"
 #include "direction.h"
 #include "level.h"
 #include "screen.h"
@@ -66,6 +67,19 @@ int main()
 		uint8_t numWorms = 4;
 		const Level *level = levels[levelIndex];
 		levelStart(level);
+
+		for (uint8_t wormIndex = 0; wormIndex < numWorms; ++wormIndex)
+		{
+			wormInit(
+				wormIndex,
+				coordToPos(level->playerStarts[wormIndex].position),
+				level->playerStarts[wormIndex].direction % Direction_count,
+				controllerAllGetDirection[ControllerName_up]);
+			wormSpeed[wormIndex] = 10;
+
+			// Just for initial drawing.
+			wormStep(wormIndex);
+		}
 
 		levelPlay(level, numWorms);
 
