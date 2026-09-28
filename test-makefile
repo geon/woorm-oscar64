@@ -32,6 +32,8 @@ src_files := \
 	src/worm.test.h \
 	src/direction.c \
 	src/direction.h \
+	src/controller.c \
+	src/controller.h \
 
 .DELETE_ON_ERROR:
 $(prg): test-makefile $(src_files)

@@ -2,6 +2,7 @@
 #define WORM_H
 
 #include "circular-buffer.h"
+#include "controller.h"
 #include "direction.h"
 #include <stdint.h>
 
@@ -9,13 +10,17 @@
 
 uint16_t wormHeadPosition[NUM_WORMS];
 uint16_t wormTailPosition[NUM_WORMS];
+ControllerGetDirection wormControllerGetDirection[NUM_WORMS];
 CircularBuffer wormCells[NUM_WORMS];
 Direction wormCellDirectionsBuffer[NUM_WORMS][0x100];
 #pragma align(wormCellDirectionsBuffer, 256)
 
 extern const uint8_t playerColors[NUM_WORMS];
 
-void wormInit(uint8_t wormIndex, uint16_t pos, Direction direction);
+void wormInit(uint8_t wormIndex, uint16_t pos, Direction direction, ControllerGetDirection controllerGetDirection);
 void wormDraw(uint8_t wormIndex);
+void wormFullStepHead(uint8_t wormIndex);
+void wormFullStepTail(uint8_t wormIndex);
+void wormStep(uint8_t wormIndex);
 
 #endif

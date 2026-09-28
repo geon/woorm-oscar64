@@ -16,6 +16,10 @@ src_files := \
 	src/controller.h \
 	src/title-screen.c \
 	src/title-screen.h \
+	src/worm.c \
+	src/worm.h \
+	src/circular-buffer.c \
+	src/circular-buffer.h \
 
 .PHONY: verify
 verify: clean test $(prg)

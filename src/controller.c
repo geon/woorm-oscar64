@@ -32,6 +32,12 @@ Direction controllerGetDirectionPath(uint8_t wormIndex)
 	return direction;
 }
 
+Direction controllerGetDirectionUp(uint8_t wormIndex)
+{
+	return Direction_up;
+}
+
 ControllerGetDirection controllerAllGetDirection[ControllerName_count] = {
 	controllerGetDirectionPath,
+	controllerGetDirectionUp,
 };

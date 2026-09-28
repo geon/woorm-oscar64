@@ -1,4 +1,5 @@
 #include "worm.h"
+#include "controller.h"
 #include "screen.h"
 #include "test/test.h"
 #include <stdint.h>
@@ -29,7 +30,7 @@ void wormTest(void)
 	{
 		screenClear(0);
 
-		wormInit(wormIndex, coordToPos(coordCreate(1, 1)), Direction_up);
+		wormInit(wormIndex, coordToPos(coordCreate(1, 1)), Direction_up, controllerAllGetDirection[ControllerName_up]);
 
 		assertTrue("End", screenChars[coordToPos(coordCreate(1, 4))]);
 		assertTrue("Before end", screenChars[coordToPos(coordCreate(1, 3))]);
