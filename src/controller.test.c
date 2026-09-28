@@ -3,14 +3,16 @@
 
 void controllerTest()
 {
-	beginTest("PathController");
+	beginTest("Path Controller");
 	{
 		Direction path[] = {
 			Direction_right,
+			Direction_left,
 		};
 		pathControllerInit(0, path, sizeof(path));
 
 		assertByte("Single step.", controllerAllGetDirection[ControllerName_path](0), Direction_right);
+		assertByte("Multiple steps.", controllerAllGetDirection[ControllerName_path](0), Direction_left);
 	}
 	endTest();
 }
