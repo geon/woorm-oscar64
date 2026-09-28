@@ -24,4 +24,8 @@ typedef struct Level
 	uint8_t *charset;
 } Level;
 
+void levelLoad(const Level *level);
+void levelSetMultiColors(const Level *level);
+void levelStart(const Level *level);
+
 #endif
