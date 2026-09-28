@@ -1,5 +1,6 @@
 #include "direction.h"
 #include "screen.h"
+#include "title-screen.h"
 #include <c64/cia.h>
 #include <c64/memmap.h>
 #include <c64/vic.h>
@@ -26,6 +27,13 @@ char charset[2048] = {
 // End "charset" section.
 #pragma data(data)
 
+const uint8_t playerColors[4] = {
+	VCOL_CYAN,
+	VCOL_GREEN,
+	VCOL_YELLOW,
+	VCOL_RED,
+};
+
 void setup(void)
 {
 	// Clear interrupts set by basic/kernal, or it will crash when it is unmapped
@@ -45,6 +53,7 @@ int main()
 {
 	setup();
 	screenClear(0);
+	titleScreen();
 
 	return 0;
 }
