@@ -28,6 +28,8 @@ src_files := \
 	generated/levels/levels.h \
 	src/worm-char.c \
 	src/worm-char.h \
+	src/level.c \
+	src/level.h \
 
 .PHONY: verify
 verify: clean test $(prg)
