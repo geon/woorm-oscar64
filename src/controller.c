@@ -6,11 +6,14 @@ void pathControllerInit(PathController *pathController, Direction path[], uint8_
 	assert(pathLength > 0);
 
 	pathController->path = path;
+	pathController->currentPathStep = 0;
 }
 
 Direction pathControllerGetDirection(PathController *pathController)
 {
-	Direction direction = pathController->path[0];
+	Direction direction = pathController->path[pathController->currentPathStep];
+
+	++(pathController->currentPathStep);
 
 	return direction;
 }
