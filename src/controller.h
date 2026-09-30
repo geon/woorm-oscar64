@@ -19,4 +19,6 @@ extern ControllerGetDirection controllerAllGetDirection[ControllerName_count];
 
 void pathControllerInit(uint8_t wormIndex, Direction path[], uint8_t pathLength);
 
+uint8_t getOpponent(uint8_t wormIndex);
+
 #endif

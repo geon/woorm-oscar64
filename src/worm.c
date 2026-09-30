@@ -21,6 +21,7 @@ void wormInit(uint8_t wormIndex, uint16_t pos, Direction direction, ControllerGe
 	wormTailMicroStep[wormIndex] = 0;
 	wormSpeed[wormIndex] = 16;
 	wormState[wormIndex] = WormState_alive;
+	wormOpponentIndex[wormIndex] = (wormIndex + 1) % NUM_WORMS;
 	circularBufferInit(&wormCells[wormIndex]);
 
 	wormPushDirection(wormIndex, direction);
