@@ -1,6 +1,10 @@
 #include "controller.h"
+#include "coord.h"
+#include "screen.h"
 #include "worm.h"
 #include <assert.h>
+#include <math.h>
+#include <stdlib.h>
 
 Direction getHeadingOfWorm(uint8_t wormIndex)
 {
@@ -26,6 +30,28 @@ uint8_t getOpponent(uint8_t wormIndex)
 	}
 
 	return 0;
+}
+
+Coord getCoordOfWorm(uint8_t wormIndex)
+{
+	return coordFromPos(wormHeadPosition[wormIndex]);
+}
+
+Direction getDirectionOfTarget(Coord wormCoord, Coord targetCoord)
+{
+	Coord diff = coordSubtract(targetCoord, wormCoord);
+
+	Direction direction;
+	if (abs(diff.x) > abs(diff.y))
+	{
+		direction = (diff.x > 0) ? Direction_right : Direction_left;
+	}
+	else
+	{
+		direction = (diff.y > 0) ? Direction_down : Direction_up;
+	}
+
+	return direction;
 }
 
 Direction turnIfOpposite(Direction currentDirection, Direction wantedDirection)
@@ -80,8 +106,24 @@ Direction controllerGetDirectionAimless(uint8_t wormIndex)
 	return getHeadingOfWorm(wormIndex);
 }
 
+Direction controllerGetDirectionAttack(uint8_t wormIndex)
+{
+	uint8_t opponentWormIndex = getOpponent(wormIndex);
+
+	Coord opponentCoord = getCoordOfWorm(opponentWormIndex);
+	Coord wormCoord = getCoordOfWorm(wormIndex);
+
+	Direction wantedDirection = getDirectionOfTarget(
+		wormCoord,
+		opponentCoord);
+
+	// When going in the opposite direction, first turn to the side.
+	return turnIfOpposite(getHeadingOfWorm(wormIndex), wantedDirection);
+}
+
 ControllerGetDirection controllerAllGetDirection[ControllerName_count] = {
 	controllerGetDirectionPath,
 	controllerGetDirectionUp,
 	controllerGetDirectionAimless,
+	controllerGetDirectionAttack,
 };
