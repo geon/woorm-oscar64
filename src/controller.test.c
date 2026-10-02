@@ -54,4 +54,21 @@ void controllerTest()
 		assertCoord("Up", getCoordInFrontOfWorm(coordCreate(3, 7), Direction_up, 6), coordCreate(3, 1));
 	}
 	endTest();
+
+	// beginTest("controllerGetDirectionBlock");
+	// {
+	// 	wormInit(0, coordToPos(coordCreate(0, 0)), Direction_up, controllerAllGetDirection[ControllerName_up]);
+	// 	wormInit(1, coordToPos(coordCreate(2, 0)), Direction_up, controllerAllGetDirection[ControllerName_up]);
+
+	// 	{
+	// 		Direction direction = controllerAllGetDirection[ControllerName_block](0);
+	// 		assertByte("close", direction, Direction_up);
+	// 	}
+	// 	wormInit(1, coordToPos(coordCreate(7, 0)), Direction_up, controllerAllGetDirection[ControllerName_up]);
+	// 	{
+	// 		Direction direction = controllerAllGetDirection[ControllerName_block](0);
+	// 		assertByte("far", direction, Direction_right);
+	// 	}
+	// }
+	// endTest();
 }
