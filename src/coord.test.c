@@ -34,4 +34,12 @@ void coordTest(void)
 		assertCoord("Negative", coordSubtract(coordCreate(5, 5), coordCreate(15, 15)), coordCreate(-10, -10));
 	}
 	endTest();
+
+	beginTest("Scale coords.");
+	{
+		assertCoord("Positive", coordScale(coordCreate(5, 5), 2), coordCreate(10, 10));
+		assertCoord("Zero", coordScale(coordCreate(5, 5), 0), coordCreate(0, 0));
+		assertCoord("Negative", coordScale(coordCreate(5, 5), -2), coordCreate(-10, -10));
+	}
+	endTest();
 }
