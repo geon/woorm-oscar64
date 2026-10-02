@@ -37,13 +37,24 @@ Coord getCoordOfWorm(uint8_t wormIndex)
 	return coordFromPos(wormHeadPosition[wormIndex]);
 }
 
+#define MIN(a, b) (((a) < (b)) ? (a) : (b))
+#define MAX(a, b) (((a) > (b)) ? (a) : (b))
+#define CLAMP(value, min, max) MIN(MAX(value, min), max)
+Coord clipCoordToScreen(Coord coord)
+{
+	return (Coord){
+		CLAMP(coord.x, 0, SCREEN_WIDTH),
+		CLAMP(coord.y, 0, SCREEN_HEIGHT),
+	};
+}
+
 Coord getCoordInFrontOfWorm(Coord wormCoord, Direction wormHeading, uint8_t distance)
 {
-	return coordAdd(
+	return clipCoordToScreen(coordAdd(
 		wormCoord,
 		coordScale(
 			coordFromDirection(wormHeading),
-			distance));
+			distance)));
 }
 
 Direction getDirectionOfTarget(Coord wormCoord, Coord targetCoord)

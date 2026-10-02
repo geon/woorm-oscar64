@@ -52,6 +52,7 @@ void controllerTest()
 	beginTest("getCoordInFrontOfWorm");
 	{
 		assertCoord("Up", getCoordInFrontOfWorm(coordCreate(3, 7), Direction_up, 6), coordCreate(3, 1));
+		assertCoord("Clipped By Screen", getCoordInFrontOfWorm(coordCreate(3, 1), Direction_up, 6), coordCreate(3, 0));
 	}
 	endTest();
 
