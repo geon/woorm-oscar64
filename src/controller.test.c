@@ -47,4 +47,13 @@ void controllerTest()
 		assertTrue("To someone else.", secondOpponent != player);
 	}
 	endTest();
+
+	beginTest("turnIfOpposite");
+	{
+		assertByte("Up", turnIfOpposite(Direction_up, Direction_up), Direction_up);
+		assertByte("Right", turnIfOpposite(Direction_up, Direction_right), Direction_right);
+		assertTrue("down", turnIfOpposite(Direction_up, Direction_down) != Direction_up);
+		assertByte("Left", turnIfOpposite(Direction_up, Direction_left), Direction_left);
+	}
+	endTest();
 }

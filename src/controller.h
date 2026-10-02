@@ -26,5 +26,6 @@ void pathControllerInit(PathController *pathController, Direction path[], uint8_
 Direction pathControllerGetDirection(PathController *pathController);
 
 Worm *getOpponent(Worm *worm);
+Direction turnIfOpposite(Direction currentDirection, Direction wantedDirection);
 
 #endif
