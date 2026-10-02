@@ -1,5 +1,11 @@
 #include "controller.h"
+#include "worm.h"
 #include <assert.h>
+
+Direction getHeadingOfWorm(uint8_t wormIndex)
+{
+	return wormCellDirectionsBuffer[wormIndex][circularBufferGetLastIndex(&wormCells[wormIndex])];
+}
 
 typedef struct PathController
 {
@@ -37,7 +43,14 @@ Direction controllerGetDirectionUp(uint8_t wormIndex)
 	return Direction_up;
 }
 
+Direction controllerGetDirectionAimless(uint8_t wormIndex)
+{
+	// Just keep moving forwards.
+	return getHeadingOfWorm(wormIndex);
+}
+
 ControllerGetDirection controllerAllGetDirection[ControllerName_count] = {
 	controllerGetDirectionPath,
 	controllerGetDirectionUp,
+	controllerGetDirectionAimless,
 };
