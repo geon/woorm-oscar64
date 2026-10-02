@@ -39,3 +39,11 @@ Coord coordSubtract(Coord a, Coord b)
 		a.y - b.y,
 	};
 }
+
+Coord coordScale(Coord coord, int8_t factor)
+{
+	return (Coord){
+		coord.x * factor,
+		coord.y * factor,
+	};
+}
