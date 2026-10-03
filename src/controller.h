@@ -30,5 +30,6 @@ Direction pathControllerGetDirection(PathController *pathController);
 Worm *getOpponent(Worm *worm);
 Direction turnIfOpposite(Direction currentDirection, Direction wantedDirection);
 Direction getDirectionOfTarget(Coord wormCoord, Coord targetCoord);
+Coord getCoordInFrontOfWorm(Coord wormCoord, Direction wormHeading, uint8_t distance);
 
 #endif
