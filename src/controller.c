@@ -43,6 +43,15 @@ Coord getCoordOfWorm(uint8_t wormIndex)
 	return coordFromPos(worm->headPosition);
 }
 
+Coord getCoordInFrontOfWorm(Coord wormCoord, Direction wormHeading, uint8_t distance)
+{
+	return coordAdd(
+		wormCoord,
+		coordScale(
+			coordFromDirection(wormHeading),
+			distance));
+}
+
 Direction getDirectionOfTarget(Coord wormCoord, Coord targetCoord)
 {
 	Coord diff = coordSubtract(targetCoord, wormCoord);
