@@ -120,3 +120,23 @@ Direction controllerGetDirectionAttack(Worm *worm)
 	// When going in the opposite direction, first turn to the side.
 	return turnIfOpposite(getHeadingOfWorm(worm), wantedDirection);
 }
+
+Direction controllerGetDirectionBlock(Worm *worm)
+{
+	Worm *opponent = getOpponent(worm);
+	if (!opponent)
+	{
+		return aimlessControllerGetDirection(nullptr, worm);
+	}
+
+	Coord targetCoord = getCoordInFrontOfWorm(
+		getCoordOfWorm(opponent),
+		getHeadingOfWorm(opponent),
+		8);
+
+	Coord wormCoord = getCoordOfWorm(worm);
+	Direction wantedDirection = getDirectionOfTarget(wormCoord, targetCoord);
+
+	// When going in the opposite direction, first turn to the side.
+	return turnIfOpposite(getHeadingOfWorm(worm), wantedDirection);
+}
