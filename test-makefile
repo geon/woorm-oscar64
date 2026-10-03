@@ -17,6 +17,12 @@ src_files := \
 	src/circular-buffer.h \
 	src/circular-buffer.test.c \
 	src/circular-buffer.test.h \
+	src/coord.c \
+	src/coord.h \
+	src/coord.test.c \
+	src/coord.test.h \
+	src/test/custom-asserts.c \
+	src/test/custom-asserts.h \
 
 .DELETE_ON_ERROR:
 $(prg): test-makefile $(src_files)
