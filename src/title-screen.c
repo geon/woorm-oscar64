@@ -57,6 +57,8 @@ void titleScreen(void)
 	worms[1].controller = ControllerName_path;
 	worms[0].pathController = &pathControllers[0];
 	worms[1].pathController = &pathControllers[1];
+	worms[0].speed = 64;
+	worms[1].speed = 64;
 
 	for (;;)
 	{

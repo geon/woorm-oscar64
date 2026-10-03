@@ -13,6 +13,9 @@ typedef struct Worm
 	uint16_t tailPosition;
 	ControllerName controller;
 	PathController *pathController;
+	uint8_t headMicroStep;
+	uint8_t tailMicroStep;
+	uint8_t speed;
 	CircularBuffer cells;
 } Worm;
 
@@ -20,6 +23,8 @@ void wormInit(Worm *worm, uint8_t color, uint16_t pos, Direction direction, Dire
 void wormDraw(Worm *worm);
 void wormFullStepHead(Worm *worm);
 void wormFullStepTail(Worm *worm);
+void wormMicroStepHead(Worm *worm, uint8_t numMicroSteps);
+void wormMicroStepTail(Worm *worm, uint8_t numMicroSteps);
 void wormStep(Worm *worm);
 
 #endif
