@@ -130,9 +130,26 @@ Direction controllerGetDirectionAttack(uint8_t wormIndex)
 	return turnIfOpposite(getHeadingOfWorm(wormIndex), wantedDirection);
 }
 
+Direction controllerGetDirectionBlock(uint8_t wormIndex)
+{
+	uint8_t opponentWormIndex = getOpponent(wormIndex);
+
+	Coord targetCoord = getCoordInFrontOfWorm(
+		getCoordOfWorm(opponentWormIndex),
+		getHeadingOfWorm(opponentWormIndex),
+		8);
+
+	Coord wormCoord = getCoordOfWorm(wormIndex);
+	Direction wantedDirection = getDirectionOfTarget(wormCoord, targetCoord);
+
+	// When going in the opposite direction, first turn to the side.
+	return turnIfOpposite(wormIndex, wantedDirection);
+}
+
 ControllerGetDirection controllerAllGetDirection[ControllerName_count] = {
 	controllerGetDirectionPath,
 	controllerGetDirectionUp,
 	controllerGetDirectionAimless,
 	controllerGetDirectionAttack,
+	controllerGetDirectionBlock,
 };

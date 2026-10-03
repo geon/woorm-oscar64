@@ -14,6 +14,7 @@ typedef enum ControllerName
 	ControllerName_up,
 	ControllerName_aimless,
 	ControllerName_attack,
+	ControllerName_block,
 	ControllerName_count
 } ControllerName;
 
