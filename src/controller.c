@@ -1,4 +1,5 @@
 #include "controller.h"
+#include "coord.h"
 #include "worm.h"
 #include "worms.h"
 #include <assert.h>
@@ -27,6 +28,23 @@ Worm *getOpponent(Worm *worm)
 	}
 
 	return 0;
+}
+
+Direction getDirectionOfTarget(Coord wormCoord, Coord targetCoord)
+{
+	Coord diff = coordSubtract(targetCoord, wormCoord);
+
+	Direction direction;
+	if (abs(diff.x) > abs(diff.y))
+	{
+		direction = (diff.x > 0) ? Direction_right : Direction_left;
+	}
+	else
+	{
+		direction = (diff.y > 0) ? Direction_down : Direction_up;
+	}
+
+	return direction;
 }
 
 Direction turnIfOpposite(Direction currentDirection, Direction wantedDirection)

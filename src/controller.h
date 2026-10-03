@@ -1,6 +1,7 @@
 #ifndef CONTROLLER_H
 #define CONTROLLER_H
 
+#include "coord.h"
 #include "direction.h"
 #include <stdint.h>
 
@@ -27,5 +28,6 @@ Direction pathControllerGetDirection(PathController *pathController);
 
 Worm *getOpponent(Worm *worm);
 Direction turnIfOpposite(Direction currentDirection, Direction wantedDirection);
+Direction getDirectionOfTarget(Coord wormCoord, Coord targetCoord);
 
 #endif
