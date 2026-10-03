@@ -11,6 +11,9 @@
 uint16_t wormHeadPosition[NUM_WORMS];
 uint16_t wormTailPosition[NUM_WORMS];
 ControllerGetDirection wormControllerGetDirection[NUM_WORMS];
+uint8_t wormHeadMicroStep[NUM_WORMS];
+uint8_t wormTailMicroStep[NUM_WORMS];
+uint8_t wormSpeed[NUM_WORMS];
 CircularBuffer wormCells[NUM_WORMS];
 Direction wormCellDirectionsBuffer[NUM_WORMS][0x100];
 #pragma align(wormCellDirectionsBuffer, 256)
@@ -21,6 +24,8 @@ void wormInit(uint8_t wormIndex, uint16_t pos, Direction direction, ControllerGe
 void wormDraw(uint8_t wormIndex);
 void wormFullStepHead(uint8_t wormIndex);
 void wormFullStepTail(uint8_t wormIndex);
+void wormMicroStepHead(uint8_t wormIndex, uint8_t numMicroSteps);
+void wormMicroStepTail(uint8_t wormIndex, uint8_t numMicroSteps);
 void wormStep(uint8_t wormIndex);
 
 #endif

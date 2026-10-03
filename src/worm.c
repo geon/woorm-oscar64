@@ -16,6 +16,9 @@ void wormInit(uint8_t wormIndex, uint16_t pos, Direction direction, ControllerGe
 	wormHeadPosition[wormIndex] = pos;
 	wormTailPosition[wormIndex] = pos - getPositionOffsetForDirection(direction) * 3;
 	wormControllerGetDirection[wormIndex] = controllerGetDirection;
+	wormHeadMicroStep[wormIndex] = 0;
+	wormTailMicroStep[wormIndex] = 0;
+	wormSpeed[wormIndex] = 16;
 	circularBufferInit(&wormCells[wormIndex]);
 
 	wormPushDirection(wormIndex, direction);
@@ -67,12 +70,44 @@ void wormFullStepTail(uint8_t wormIndex)
 	circularBufferPop(&wormCells[wormIndex], &segmentIndex);
 }
 
+void wormMicroStepHead(uint8_t wormIndex, uint8_t numMicroSteps)
+{
+	uint8_t old = wormHeadMicroStep[wormIndex];
+	uint8_t new = old + numMicroSteps;
+	bool overflowed = old > new;
+
+	if (overflowed)
+	{
+		wormFullStepHead(wormIndex);
+	}
+
+	wormHeadMicroStep[wormIndex] = new;
+}
+
+void wormMicroStepTail(uint8_t wormIndex, uint8_t numMicroSteps)
+{
+	uint8_t old = wormTailMicroStep[wormIndex];
+	uint8_t new = old + numMicroSteps;
+	bool overflowed = old > new;
+
+	if (overflowed)
+	{
+		wormFullStepTail(wormIndex);
+	}
+
+	wormTailMicroStep[wormIndex] = new;
+}
+
 void wormStep(uint8_t wormIndex)
 {
 	vic.color_border = playerColors[wormIndex];
 
-	wormFullStepHead(wormIndex);
-	wormFullStepTail(wormIndex);
+	uint8_t growthRate = 1;
+	uint8_t headSpeed = wormSpeed[wormIndex];
+	uint8_t tailSpeed = headSpeed;
+
+	wormMicroStepHead(wormIndex, headSpeed);
+	wormMicroStepTail(wormIndex, tailSpeed);
 
 	vic.color_border = VCOL_BLACK;
 }
