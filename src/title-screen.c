@@ -40,6 +40,8 @@ void titleScreen(void)
 	wormInit(&worms[1], 1, playerColors[2], pathStartB, Direction_up, wormCellDirectionsBuffers[1]);
 	worms[0].controllerGetDirection = controllerAllGetDirection[ControllerName_path];
 	worms[1].controllerGetDirection = controllerAllGetDirection[ControllerName_path];
+	worms[0].speed = 64;
+	worms[1].speed = 64;
 
 	for (;;)
 	{
