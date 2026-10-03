@@ -1,4 +1,6 @@
 #include "controller.h"
+#include "coord.h"
+#include "test/custom-asserts.h"
 #include "test/test.h"
 #include "worm.h"
 
@@ -44,6 +46,12 @@ void controllerTest()
 		assertByte("Right", turnIfOpposite(Direction_up, Direction_right), Direction_right);
 		assertTrue("down", turnIfOpposite(Direction_up, Direction_down) != Direction_up);
 		assertByte("Left", turnIfOpposite(Direction_up, Direction_left), Direction_left);
+	}
+	endTest();
+
+	beginTest("getCoordInFrontOfWorm");
+	{
+		assertCoord("Up", getCoordInFrontOfWorm(coordCreate(3, 7), Direction_up, 6), coordCreate(3, 1));
 	}
 	endTest();
 }

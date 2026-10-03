@@ -1,6 +1,7 @@
 #ifndef CONTROLLER_H
 #define CONTROLLER_H
 
+#include "coord.h"
 #include "direction.h"
 #include <stdint.h>
 
@@ -22,5 +23,6 @@ void pathControllerInit(uint8_t wormIndex, Direction path[], uint8_t pathLength)
 
 uint8_t getOpponent(uint8_t wormIndex);
 Direction turnIfOpposite(Direction currentDirection, Direction wantedDirection);
+Coord getCoordInFrontOfWorm(Coord wormCoord, Direction wormHeading, uint8_t distance);
 
 #endif
