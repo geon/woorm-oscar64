@@ -38,5 +38,6 @@ void wormFullStepTail(Worm *worm);
 void wormMicroStepHead(Worm *worm, uint8_t numMicroSteps);
 void wormMicroStepTail(Worm *worm, uint8_t numMicroSteps);
 void wormStep(Worm *worm);
+void wormSetNextDirection(Worm *worm, Direction direction);
 
 #endif
