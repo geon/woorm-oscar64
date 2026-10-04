@@ -128,6 +128,8 @@ void wormMicroStepHead(Worm *worm, uint8_t numMicroSteps)
 
 	if (worm->state == WormState_blocked)
 	{
+		// TODO: Also check all possible directions.
+		// TODO: Refactor with isValidNextDirection
 		// Check is still blocked.
 		Direction direction = worm->cellDirectionsBuffer[circularBufferAtIndexReverse(&worm->cells, 0)];
 		uint16_t nextPosition = worm->headPosition + getPositionOffsetForDirection(direction);
