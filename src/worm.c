@@ -51,8 +51,8 @@ void wormFullStepHead(Worm *worm)
 	Direction direction = worm->controllerGetDirection ? worm->controllerGetDirection(worm->index) : Direction_up;
 	uint16_t nextPosition = worm->headPosition + getPositionOffsetForDirection(direction);
 
-	worm->headPosition = nextPosition;
 	wormPushDirection(worm, direction);
+	worm->headPosition = nextPosition;
 
 	// Draw the worm in the tile it just entered.
 	screenChars[worm->headPosition] = 1;
