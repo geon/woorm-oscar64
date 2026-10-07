@@ -1,5 +1,6 @@
 #include "controller.h"
 #include "screen.h"
+#include "worm.h"
 #include "worms.h"
 #include <c64/vic.h>
 #include <stdint.h>
@@ -37,25 +38,31 @@ void titleScreen(void)
 	pathControllerInit(&pathControllers[0], pathA, sizeof(pathA));
 	pathControllerInit(&pathControllers[1], pathB, sizeof(pathB));
 
-	uint16_t positionA = pathStartA;
-	uint16_t positionB = pathStartB;
+	wormInit(
+		&worms[0],
+		wormColors[1],
+		pathStartA,
+		Direction_up,
+		wormCellDirectionsBuffers[0]);
+
+	wormInit(
+		&worms[1],
+		wormColors[2],
+		pathStartB,
+		Direction_up,
+		wormCellDirectionsBuffers[1]);
+
+	// TODO: Add method for this.
+	worms[0].controller = ControllerName_path;
+	worms[1].controller = ControllerName_path;
+	worms[0].pathController = &pathControllers[0];
+	worms[1].pathController = &pathControllers[1];
 
 	for (;;)
 	{
 		vic_waitFrame();
 
-		vic.color_border = wormColors[1];
-		screenChars[positionA] = 0x00;
-		positionA += getPositionOffsetForDirection(pathControllerGetDirection(&pathControllers[0]));
-		screenChars[positionA] = 0x01;
-		screenColors[positionA] = wormColors[1];
-		vic.color_border = VCOL_BLACK;
-
-		vic.color_border = wormColors[2];
-		screenChars[positionB] = 0x00;
-		positionB += getPositionOffsetForDirection(pathControllerGetDirection(&pathControllers[1]));
-		screenChars[positionB] = 0x01;
-		screenColors[positionB] = wormColors[2];
-		vic.color_border = VCOL_BLACK;
+		wormStep(&worms[0]);
+		wormStep(&worms[1]);
 	}
 }

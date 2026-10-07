@@ -2,6 +2,7 @@
 #define WORM_H
 
 #include "circular-buffer.h"
+#include "controller.h"
 #include "direction.h"
 #include <stdint.h>
 
@@ -10,6 +11,8 @@ typedef struct Worm
 	uint8_t color;
 	uint16_t headPosition;
 	uint16_t tailPosition;
+	ControllerName controller;
+	PathController *pathController;
 	CircularBuffer cells;
 } Worm;
 

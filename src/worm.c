@@ -2,6 +2,7 @@
 #include "circular-buffer.h"
 #include "direction.h"
 #include "screen.h"
+#include <c64/vic.h>
 
 void wormPushDirection(Worm *worm, Direction direction)
 {
@@ -14,6 +15,8 @@ void wormInit(Worm *worm, uint8_t color, uint16_t pos, Direction direction, Dire
 	worm->color = color;
 	worm->headPosition = pos;
 	worm->tailPosition = pos - getPositionOffsetForDirection(direction) * 3;
+	worm->controller = ControllerName_none;
+	worm->pathController = nullptr;
 	circularBufferInit(&worm->cells, cellDirectionsBuffer);
 
 	wormPushDirection(worm, direction);
@@ -43,7 +46,22 @@ void wormDraw(Worm *worm)
 
 void wormFullStepHead(Worm *worm)
 {
-	Direction direction = circularBufferAtIndexReverse(&worm->cells, 0);
+	Direction direction;
+	switch (worm->controller)
+	{
+		case ControllerName_path:
+		{
+			direction = pathControllerGetDirection(worm->pathController);
+			break;
+		}
+
+		default:
+		{
+			direction = circularBufferAtIndexReverse(&worm->cells, 0);
+			break;
+		}
+	}
+
 	uint16_t nextPosition = worm->headPosition + getPositionOffsetForDirection(direction);
 
 	wormPushDirection(worm, direction);
@@ -62,6 +80,10 @@ void wormFullStepTail(Worm *worm)
 
 void wormStep(Worm *worm)
 {
+	vic.color_border = worm->color;
+
 	wormFullStepHead(worm);
 	wormFullStepTail(worm);
+
+	vic.color_border = VCOL_BLACK;
 }
