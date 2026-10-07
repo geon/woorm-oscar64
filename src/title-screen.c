@@ -1,5 +1,6 @@
 #include "controller.h"
 #include "screen.h"
+#include "worm.h"
 #include "worms.h"
 #include <c64/vic.h>
 #include <stdint.h>
@@ -35,25 +36,16 @@ void titleScreen(void)
 	pathControllerInit(0, pathA, sizeof(pathA));
 	pathControllerInit(1, pathB, sizeof(pathB));
 
-	uint16_t positionA = pathStartA;
-	uint16_t positionB = pathStartB;
+	wormInit(&worms[0], 0, playerColors[1], pathStartA, Direction_up, wormCellDirectionsBuffers[0]);
+	wormInit(&worms[1], 1, playerColors[2], pathStartB, Direction_up, wormCellDirectionsBuffers[1]);
+	worms[0].controllerGetDirection = controllerAllGetDirection[ControllerName_path];
+	worms[1].controllerGetDirection = controllerAllGetDirection[ControllerName_path];
 
 	for (;;)
 	{
 		vic_waitFrame();
 
-		vic.color_border = playerColors[1];
-		screenChars[positionA] = 0x00;
-		positionA += getPositionOffsetForDirection(controllerAllGetDirection[ControllerName_path](0));
-		screenChars[positionA] = 0x01;
-		screenColors[positionA] = playerColors[1];
-		vic.color_border = VCOL_BLACK;
-
-		vic.color_border = playerColors[2];
-		screenChars[positionB] = 0x00;
-		positionB += getPositionOffsetForDirection(controllerAllGetDirection[ControllerName_path](1));
-		screenChars[positionB] = 0x01;
-		screenColors[positionB] = playerColors[2];
-		vic.color_border = VCOL_BLACK;
+		wormStep(&worms[0]);
+		wormStep(&worms[1]);
 	}
 }
