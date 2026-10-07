@@ -1,5 +1,6 @@
 #include "controller.h"
 #include "screen.h"
+#include "worms.h"
 #include <c64/vic.h>
 #include <stdint.h>
 
@@ -41,18 +42,18 @@ void titleScreen(void)
 	{
 		vic_waitFrame();
 
-		vic.color_border = playerColors[0];
+		vic.color_border = playerColors[1];
 		screenChars[positionA] = 0x00;
 		positionA += getPositionOffsetForDirection(controllerAllGetDirection[ControllerName_path](0));
 		screenChars[positionA] = 0x01;
-		screenColors[positionA] = playerColors[0];
+		screenColors[positionA] = playerColors[1];
 		vic.color_border = VCOL_BLACK;
 
-		vic.color_border = playerColors[1];
+		vic.color_border = playerColors[2];
 		screenChars[positionB] = 0x00;
 		positionB += getPositionOffsetForDirection(controllerAllGetDirection[ControllerName_path](1));
 		screenChars[positionB] = 0x01;
-		screenColors[positionB] = playerColors[1];
+		screenColors[positionB] = playerColors[2];
 		vic.color_border = VCOL_BLACK;
 	}
 }

@@ -2,6 +2,7 @@
 #include "controller.test.h"
 #include "coord.test.h"
 #include "test/test.h"
+#include "worm.test.h"
 
 int main()
 {
@@ -11,6 +12,7 @@ int main()
 	controllerTest();
 	circularBufferTest();
 	coordTest();
+	wormTest();
 
 	afterTests();
 
