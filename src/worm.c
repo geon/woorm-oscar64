@@ -48,7 +48,7 @@ void wormDraw(Worm *worm)
 
 void wormFullStepHead(Worm *worm)
 {
-	Direction direction = worm->controllerGetDirection ? worm->controllerGetDirection(worm->index) : Direction_up;
+	Direction direction = worm->controllerGetDirection ? worm->controllerGetDirection(worm->index) : worm->cellDirectionsBuffer[circularBufferAtIndexReverse(&worm->cells, 0)];
 	uint16_t nextPosition = worm->headPosition + getPositionOffsetForDirection(direction);
 
 	wormPushDirection(worm, direction);
@@ -64,7 +64,7 @@ void wormFullStepTail(Worm *worm)
 	// Erase the worm from the tile it just left.
 	screenChars[worm->tailPosition] = 0x00;
 
-	worm->tailPosition += getPositionOffsetForDirection(worm->cellDirectionsBuffer[worm->cells.begin]);
+	worm->tailPosition += getPositionOffsetForDirection(worm->cellDirectionsBuffer[circularBufferAtIndex(&worm->cells, 0)]);
 	uint8_t segmentIndex;
 	circularBufferPop(&worm->cells, &segmentIndex);
 }
