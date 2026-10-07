@@ -10,6 +10,7 @@ typedef enum ControllerName
 {
 	ControllerName_first,
 	ControllerName_path = 0,
+	ControllerName_up,
 	ControllerName_count
 } ControllerName;
 

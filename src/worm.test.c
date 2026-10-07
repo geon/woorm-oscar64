@@ -1,4 +1,5 @@
 #include "worm.h"
+#include "controller.h"
 #include "screen.h"
 #include "test/test.h"
 #include "worms.h"
@@ -30,6 +31,7 @@ void wormTest(void)
 
 		wormInit(
 			&worms[wormIndex],
+			0,
 			playerColors[wormIndex],
 			coordToPos(coordCreate(1, 1)),
 			Direction_up,
