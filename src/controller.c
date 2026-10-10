@@ -9,6 +9,30 @@ Direction getHeadingOfWorm(uint8_t wormIndex)
 	return wormCellDirectionsBuffers[wormIndex][circularBufferAtIndexReverse(&worm->cells, 0)];
 }
 
+uint8_t getOpponent(uint8_t wormIndex)
+{
+	Worm *worm = &worms[wormIndex];
+	uint8_t opponentIndex = worm->opponentIndex;
+	Worm *opponent = &worms[opponentIndex];
+	if (opponent->state != WormState_dead)
+	{
+		return opponentIndex;
+	}
+
+	// Try all worms.
+	for (uint8_t index = 0; index < NUM_WORMS; ++index)
+	{
+		uint8_t opponentIndex = index;
+		opponent = &worms[opponentIndex];
+		if (opponentIndex != wormIndex && opponent->state != WormState_dead)
+		{
+			return opponentIndex;
+		}
+	}
+
+	return 0;
+}
+
 typedef struct PathController
 {
 	Direction *path;

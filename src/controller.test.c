@@ -1,8 +1,12 @@
 #include "controller.h"
+#include "coord.h"
 #include "test/test.h"
+#include "worm.h"
+#include "worms.h"
 
 void controllerTest()
 {
+
 	beginTest("Path Controller");
 	{
 		Direction path[] = {
@@ -14,6 +18,34 @@ void controllerTest()
 		assertByte("Single step.", controllerAllGetDirection[ControllerName_path](0), Direction_right);
 		assertByte("Multiple steps.", controllerAllGetDirection[ControllerName_path](0), Direction_left);
 		assertByte("Loop steps.", controllerAllGetDirection[ControllerName_path](0), Direction_right);
+	}
+	endTest();
+
+	beginTest("getOpponent");
+	{
+		for (int wormIndex = 0; wormIndex < NUM_WORMS; ++wormIndex)
+		{
+			Worm *worm = &worms[wormIndex];
+			wormInit(
+				worm,
+				wormIndex,
+				playerColors[wormIndex],
+				coordToPos(coordCreate(1, 1)),
+				Direction_up,
+				wormCellDirectionsBuffers[wormIndex]);
+		}
+
+		uint8_t playerIndex = 0;
+		uint8_t firstOpponentIndex = getOpponent(playerIndex);
+
+		assertTrue("Someone else is the opponent.", firstOpponentIndex != playerIndex);
+
+		Worm *firstOpponent = &worms[firstOpponentIndex];
+		firstOpponent->state = WormState_dead;
+		uint8_t secondOpponentIndex = getOpponent(playerIndex);
+
+		assertTrue("The opponent changes when it dies.", secondOpponentIndex != firstOpponentIndex);
+		assertTrue("To someone else.", secondOpponentIndex != playerIndex);
 	}
 	endTest();
 }
