@@ -30,6 +30,8 @@ src_files := \
 	src/coord.h \
 	src/level.c \
 	src/level.h \
+	src/worms.c \
+	src/worms.h \
 
 .PHONY: verify
 verify: clean test $(prg)

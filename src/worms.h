@@ -13,4 +13,6 @@ Worm worms[NUM_WORMS];
 Direction wormCellDirectionsBuffers[NUM_WORMS][0x100];
 #pragma align(wormCellDirectionsBuffers, 256);
 
+extern const uint8_t playerColors[NUM_WORMS];
+
 #endif
