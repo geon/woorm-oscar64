@@ -212,9 +212,9 @@ void wormStep(Worm *worm)
 
 	vic.color_border = worm->color;
 
-	int8_t growthRate = 10;
+	int8_t growthRate = 3;
 	int8_t headSpeed = worm->speed;
-	uint8_t tailSpeed = 0;
+	int8_t tailSpeed = 0;
 	switch (worm->state)
 	{
 		case WormState_alive:
