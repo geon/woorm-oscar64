@@ -1,5 +1,6 @@
 #include "level.h"
 #include "../generated/charset-static-size.h"
+#include "worms.h"
 #include <c64/joystick.h>
 #include <c64/vic.h>
 
@@ -28,6 +29,11 @@ void levelPlay(const Level *level, uint8_t numWorms)
 	for (;;)
 	{
 		vic_waitFrame();
+
+		for (uint8_t wormIndex = 0; wormIndex < numWorms; ++wormIndex)
+		{
+			wormStep(&worms[wormIndex]);
+		}
 
 		joy_poll(0);
 		if (joyb[0])
