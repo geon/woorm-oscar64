@@ -1,6 +1,7 @@
 #include "worm.h"
 #include "circular-buffer.h"
 #include "direction.h"
+#include "minmax.h"
 #include "screen.h"
 #include "worm-char.h"
 #include "worms.h"
@@ -191,17 +192,58 @@ void wormMicroStepTail(Worm *worm, uint8_t numMicroSteps)
 		worm->tailMicroStep)];
 }
 
+void wormErase(Worm *worm)
+{
+	uint16_t position = worm->tailPosition;
+	for (uint8_t iterator = worm->cells.begin + 1; iterator < worm->cells.end; ++iterator)
+	{
+		screenChars[position] = 0x00;
+		const Direction direction = worm->cellDirectionsBuffer[iterator];
+		position += getPositionOffsetForDirection(direction);
+	}
+}
+
 void wormStep(Worm *worm)
 {
+	if (worm->state == WormState_dead)
+	{
+		return;
+	}
+
 	vic.color_border = worm->color;
 
-	uint8_t growthRate = 1;
-	uint8_t headSpeed = worm->speed;
-	uint8_t blocked = worm->state == WormState_blocked;
-	uint8_t tailSpeed = blocked ? 0 : headSpeed;
+	int8_t growthRate = 10;
+	int8_t headSpeed = worm->speed;
+	uint8_t tailSpeed = 0;
+	switch (worm->state)
+	{
+		case WormState_alive:
+		{
+			tailSpeed = MAX(0, headSpeed - growthRate);
+			break;
+		}
+
+		case WormState_blocked:
+		{
+			tailSpeed = headSpeed * 2;
+			break;
+		}
+
+		case WormState_titleScreen:
+		{
+			tailSpeed = headSpeed;
+			break;
+		}
+	}
 
 	wormMicroStepHead(worm, headSpeed);
 	wormMicroStepTail(worm, tailSpeed);
+
+	if (circularBufferSize(&worm->cells) <= 4)
+	{
+		worm->state = WormState_dead;
+		wormErase(worm);
+	}
 
 	vic.color_border = VCOL_BLACK;
 }

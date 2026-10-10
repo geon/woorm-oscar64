@@ -73,10 +73,13 @@ int main()
 				level->playerStarts[wormIndex].direction % Direction_count,
 				wormCellDirectionsBuffers[wormIndex]);
 			worm->speed = 10;
+			worm->controllerGetDirection = controllerAllGetDirection[ControllerName_block];
 
 			// Just for initial drawing.
 			wormStep(worm);
 		}
+
+		worms[0].controllerGetDirection = nullptr;
 
 		levelPlay(level, numWorms);
 
