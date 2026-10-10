@@ -1,5 +1,6 @@
 #include "controller.h"
 #include "coord.h"
+#include "minmax.h"
 #include "screen.h"
 #include "worm.h"
 #include "worms.h"
@@ -38,9 +39,6 @@ Coord getCoordOfWorm(Worm *worm)
 	return coordFromPos(worm->headPosition);
 }
 
-#define MIN(a, b) (((a) < (b)) ? (a) : (b))
-#define MAX(a, b) (((a) > (b)) ? (a) : (b))
-#define CLAMP(value, min, max) MIN(MAX(value, min), max)
 Coord clipCoordToScreen(Coord coord)
 {
 	return (Coord){

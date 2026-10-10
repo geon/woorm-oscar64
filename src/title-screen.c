@@ -44,26 +44,19 @@ void titleScreen(void)
 	pathControllerInit(&pathControllers[0], pathA, sizeof(pathA));
 	pathControllerInit(&pathControllers[1], pathB, sizeof(pathB));
 
-	wormInit(
-		&worms[0],
-		wormColors[1],
-		coordToPos(level_title_screen.playerStarts[0].position),
-		level_title_screen.playerStarts[0].direction,
-		wormCellDirectionsBuffers[0]);
+	for (uint8_t wormIndex = 0; wormIndex < numWorms; ++wormIndex)
+	{
+		wormInit(
+			&worms[wormIndex],
+			wormColors[wormIndex + 1],
+			coordToPos(level_title_screen.playerStarts[wormIndex].position),
+			level_title_screen.playerStarts[wormIndex].direction,
+			wormCellDirectionsBuffers[wormIndex]);
 
-	wormInit(
-		&worms[1],
-		wormColors[2],
-		coordToPos(level_title_screen.playerStarts[1].position),
-		level_title_screen.playerStarts[1].direction,
-		wormCellDirectionsBuffers[1]);
-
-	worms[0].controller = ControllerName_path;
-	worms[1].controller = ControllerName_path;
-	worms[0].pathController = &pathControllers[0];
-	worms[1].pathController = &pathControllers[1];
-	worms[0].speed = 64;
-	worms[1].speed = 64;
+		worms[wormIndex].controller = ControllerName_path;
+		worms[wormIndex].pathController = &pathControllers[wormIndex];
+		worms[wormIndex].speed = 64;
+	}
 
 	for (;;)
 	{

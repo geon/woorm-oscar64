@@ -12,6 +12,7 @@ typedef enum WormState
 	WormState_alive = 0,
 	WormState_blocked,
 	WormState_dead,
+	WormState_titleScreen,
 	WormState_count
 } WormState;
 

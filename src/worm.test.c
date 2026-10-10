@@ -77,6 +77,7 @@ void wormTest(void)
 			coordToPos(coordCreate(3, 3)),
 			Direction_up,
 			wormCellDirectionsBuffers[wormIndex]);
+
 		// Block the worm.
 		worm->state = WormState_blocked;
 		// Force a full step.
