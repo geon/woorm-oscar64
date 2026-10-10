@@ -3,6 +3,8 @@
 #include "level.h"
 #include "screen.h"
 #include "title-screen.h"
+#include "worm.h"
+#include "worms.h"
 #include <c64/cia.h>
 #include <c64/joystick.h>
 #include <c64/memmap.h>
@@ -45,6 +47,13 @@ void setup(void)
 	vic.color_back2 = VCOL_BROWN;
 }
 
+const uint8_t playerColors[NUM_WORMS] = {
+	VCOL_YELLOW,
+	VCOL_CYAN,
+	VCOL_GREEN,
+	VCOL_RED,
+};
+
 int main()
 {
 	setup();
@@ -59,6 +68,22 @@ int main()
 		uint8_t numWorms = 4;
 		const Level *level = levels[levelIndex];
 		levelStart(level);
+
+		for (uint8_t wormIndex = 0; wormIndex < numWorms; ++wormIndex)
+		{
+			Worm *worm = &worms[wormIndex];
+			wormInit(
+				worm,
+				wormIndex,
+				playerColors[wormIndex],
+				coordToPos(level->playerStarts[wormIndex].position),
+				level->playerStarts[wormIndex].direction % Direction_count,
+				wormCellDirectionsBuffers[wormIndex]);
+			worm->speed = 10;
+
+			// Just for initial drawing.
+			wormStep(worm);
+		}
 
 		levelPlay(level, numWorms);
 

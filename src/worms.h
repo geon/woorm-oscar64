@@ -13,11 +13,4 @@ Worm worms[NUM_WORMS];
 Direction wormCellDirectionsBuffers[NUM_WORMS][0x100];
 #pragma align(wormCellDirectionsBuffers, 256);
 
-const uint8_t playerColors[NUM_WORMS] = {
-	VCOL_YELLOW,
-	VCOL_CYAN,
-	VCOL_GREEN,
-	VCOL_RED,
-};
-
 #endif
