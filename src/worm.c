@@ -2,11 +2,11 @@
 #include "circular-buffer.h"
 #include "direction.h"
 #include "screen.h"
+#include "worm-char.h"
 #include <c64/vic.h>
 
 void wormPushDirection(Worm *worm, Direction direction)
 {
-	uint8_t segmentIndex;
 	circularBufferPush(&worm->cells, direction);
 }
 
@@ -25,6 +25,8 @@ void wormInit(Worm *worm, uint8_t color, uint16_t pos, Direction direction, Dire
 	wormPushDirection(worm, direction);
 	wormPushDirection(worm, direction);
 	wormPushDirection(worm, direction);
+	wormPushDirection(worm, direction);
+	wormPushDirection(worm, direction);
 
 	wormDraw(worm);
 }
@@ -37,7 +39,7 @@ void wormDraw(Worm *worm)
 	screenChars[position] = 1;
 	screenColors[position] = color;
 
-	for (uint8_t cellIndex = 0; cellIndex < circularBufferSize(&worm->cells); ++cellIndex)
+	for (uint8_t cellIndex = 0; cellIndex < circularBufferSize(&worm->cells) - 2; ++cellIndex)
 	{
 		const Direction direction = circularBufferAtIndex(&worm->cells, cellIndex);
 		position += getPositionOffsetForDirection(direction);
@@ -49,39 +51,38 @@ void wormDraw(Worm *worm)
 
 void wormFullStepHead(Worm *worm)
 {
-	Direction direction;
+	Direction direction = circularBufferAtIndexReverse(&worm->cells, 0);
+	uint16_t nextPosition = worm->headPosition + getPositionOffsetForDirection(direction);
+
+	Direction nextDirection;
 	switch (worm->controller)
 	{
 		case ControllerName_path:
 		{
-			direction = pathControllerGetDirection(worm->pathController);
+			nextDirection = pathControllerGetDirection(worm->pathController);
 			break;
 		}
 
 		default:
 		{
-			direction = circularBufferAtIndexReverse(&worm->cells, 0);
+			nextDirection = direction;
 			break;
 		}
 	}
 
-	uint16_t nextPosition = worm->headPosition + getPositionOffsetForDirection(direction);
-
-	wormPushDirection(worm, direction);
 	worm->headPosition = nextPosition;
-
-	// Draw the worm in the tile it just entered.
-	screenChars[worm->headPosition] = 1;
-	screenColors[worm->headPosition] = worm->color;
+	wormPushDirection(worm, nextDirection);
+	screenColors[nextPosition] = worm->color + 8;
 }
 
 void wormFullStepTail(Worm *worm)
 {
+	circularBufferPop(&worm->cells);
+
 	// Erase the worm from the tile it just left.
 	screenChars[worm->tailPosition] = 0x00;
 
 	worm->tailPosition += getPositionOffsetForDirection(circularBufferAtIndex(&worm->cells, 0));
-	circularBufferPop(&worm->cells);
 }
 
 void wormMicroStepHead(Worm *worm, uint8_t numMicroSteps)
@@ -96,6 +97,27 @@ void wormMicroStepHead(Worm *worm, uint8_t numMicroSteps)
 	}
 
 	worm->headMicroStep = new;
+
+	// Head:
+	// Zero index is the first visible tile, and index 3 is completely filled.
+	// On overflow, the head immediately occupies 2 pixels in the new tile.
+
+	// End:
+	// Zero index is full, and index 3 is the last visible tile. Reverse of the head.
+	// On overflow, the end tile used to only occupy 2 pixels, and is erased.
+
+	// Draw the worm.
+	screenChars[worm->headPosition] = charsetLookup[wormCharPackBits(
+		WormCharPlacement_head,
+		circularBufferAtIndexReverse(&worm->cells, 1),
+		circularBufferAtIndexReverse(&worm->cells, 0),
+		worm->headMicroStep)];
+
+	screenChars[worm->headPosition - getPositionOffsetForDirection(circularBufferAtIndexReverse(&worm->cells, 1))] = charsetLookup[wormCharPackBits(
+		WormCharPlacement_after_head,
+		circularBufferAtIndexReverse(&worm->cells, 2),
+		circularBufferAtIndexReverse(&worm->cells, 1),
+		worm->headMicroStep)];
 }
 
 void wormMicroStepTail(Worm *worm, uint8_t numMicroSteps)
@@ -110,6 +132,19 @@ void wormMicroStepTail(Worm *worm, uint8_t numMicroSteps)
 	}
 
 	worm->tailMicroStep = new;
+
+	// Draw the worm.
+	screenChars[worm->tailPosition] = charsetLookup[wormCharPackBits(
+		WormCharPlacement_end,
+		circularBufferAtIndex(&worm->cells, 0),
+		circularBufferAtIndex(&worm->cells, 1),
+		worm->tailMicroStep)];
+
+	screenChars[worm->tailPosition + getPositionOffsetForDirection(circularBufferAtIndex(&worm->cells, 1))] = charsetLookup[wormCharPackBits(
+		WormCharPlacement_before_end,
+		circularBufferAtIndex(&worm->cells, 1),
+		circularBufferAtIndex(&worm->cells, 2),
+		worm->tailMicroStep)];
 }
 
 void wormStep(Worm *worm)
