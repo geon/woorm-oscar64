@@ -4,6 +4,8 @@
 #include "direction.h"
 #include <stdint.h>
 
+typedef struct Worm;
+
 typedef enum ControllerName
 {
 	ControllerName_first,
@@ -22,5 +24,7 @@ typedef struct PathController
 
 void pathControllerInit(PathController *pathController, Direction path[], uint8_t pathLength);
 Direction pathControllerGetDirection(PathController *pathController);
+
+Worm *getOpponent(Worm *worm);
 
 #endif

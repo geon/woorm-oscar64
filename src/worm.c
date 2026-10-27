@@ -3,6 +3,7 @@
 #include "direction.h"
 #include "screen.h"
 #include "worm-char.h"
+#include "worms.h"
 #include <c64/vic.h>
 
 void wormPushDirection(Worm *worm, Direction direction)
@@ -10,10 +11,26 @@ void wormPushDirection(Worm *worm, Direction direction)
 	circularBufferPush(&worm->cells, direction);
 }
 
+uint8_t wormGetIndex(Worm *worm)
+{
+	for (uint8_t wormIndex = 0; wormIndex < NUM_WORMS; ++wormIndex)
+	{
+		if (&worms[wormIndex] == worm)
+		{
+			return wormIndex;
+		}
+	}
+
+	// Should never happen.
+	assert(true);
+	return 0xff;
+}
+
 void wormInit(Worm *worm, uint8_t color, uint16_t pos, Direction direction, Direction *cellDirectionsBuffer)
 {
 	worm->color = color;
 	worm->state = WormState_alive;
+	worm->opponent = &worms[(wormGetIndex(worm) + 1) % NUM_WORMS];
 	worm->headPosition = pos;
 	worm->tailPosition = pos - getPositionOffsetForDirection(direction) * 3;
 	worm->controller = ControllerName_none;

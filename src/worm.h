@@ -11,6 +11,7 @@ typedef enum WormState
 	WormState_first,
 	WormState_alive = 0,
 	WormState_blocked,
+	WormState_dead,
 	WormState_count
 } WormState;
 
@@ -18,6 +19,7 @@ typedef struct Worm
 {
 	uint8_t color;
 	WormState state;
+	Worm *opponent;
 	uint16_t headPosition;
 	uint16_t tailPosition;
 	ControllerName controller;
