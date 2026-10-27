@@ -66,4 +66,24 @@ void wormTest(void)
 		assertByte("The worm is blocked.", worm->state, WormState_blocked);
 	}
 	endTest();
+
+	beginTest("A blocked worm is released when the obstacle is cleared.");
+	{
+		screenClear(0);
+
+		wormInit(
+			worm,
+			wormColors[wormIndex],
+			coordToPos(coordCreate(3, 3)),
+			Direction_up,
+			wormCellDirectionsBuffers[wormIndex]);
+		// Block the worm.
+		worm->state = WormState_blocked;
+		// Force a full step.
+		worm->speed = 0xff;
+		wormStep(worm);
+
+		assertByte("The worm is not blocked.", worm->state, WormState_alive);
+	}
+	endTest();
 }

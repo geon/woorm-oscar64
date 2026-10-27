@@ -154,7 +154,14 @@ void wormMicroStepHead(Worm *worm, uint8_t numMicroSteps)
 
 	if (worm->state == WormState_blocked)
 	{
-		return;
+		// Check is still blocked.
+		Direction direction = circularBufferAtIndexReverse(&worm->cells, 0);
+		uint16_t nextPosition = worm->headPosition + getPositionOffsetForDirection(direction);
+		if (screenChars[nextPosition])
+		{
+			return;
+		}
+		worm->state = WormState_alive;
 	}
 
 	worm->headMicroStep = new;
