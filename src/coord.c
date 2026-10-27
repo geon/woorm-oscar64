@@ -37,6 +37,8 @@ Coord coordFromDirection(Direction direction)
 		case Direction_right:
 			return (Coord){1, 0};
 	}
+
+	return (Coord){0, 0};
 }
 
 Coord coordAdd(Coord a, Coord b)

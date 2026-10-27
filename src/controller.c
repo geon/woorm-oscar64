@@ -1,6 +1,12 @@
 #include "controller.h"
 #include "worm.h"
+#include "worms.h"
 #include <assert.h>
+
+Direction getHeadingOfWorm(Worm *worm)
+{
+	return circularBufferAtIndexReverse(&worm->cells, 0);
+}
 
 void pathControllerInit(PathController *pathController, Direction path[], uint8_t pathLength)
 {
@@ -22,4 +28,10 @@ Direction pathControllerGetDirection(PathController *pathController)
 	}
 
 	return direction;
+}
+
+Direction aimlessControllerGetDirection(Worm *worm)
+{
+	// Just keep moving forwards.
+	return getHeadingOfWorm(worm);
 }

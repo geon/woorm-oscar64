@@ -9,6 +9,7 @@ typedef enum ControllerName
 	ControllerName_first,
 	ControllerName_none = 0,
 	ControllerName_path,
+	ControllerName_aimless,
 	ControllerName_count
 } ControllerName;
 
