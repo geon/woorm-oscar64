@@ -40,3 +40,28 @@ void wormDraw(Worm *worm)
 		screenColors[position] = color;
 	}
 }
+
+void wormFullStepHead(Worm *worm)
+{
+	Direction direction = circularBufferAtIndexReverse(&worm->cells, 0);
+	uint16_t nextPosition = worm->headPosition + getPositionOffsetForDirection(direction);
+
+	wormPushDirection(worm, direction);
+	worm->headPosition = nextPosition;
+
+	wormDraw(worm);
+}
+
+void wormFullStepTail(Worm *worm)
+{
+	screenChars[worm->tailPosition] = 0x00;
+
+	worm->tailPosition += getPositionOffsetForDirection(circularBufferAtIndex(&worm->cells, 0));
+	circularBufferPop(&worm->cells);
+}
+
+void wormStep(Worm *worm)
+{
+	wormFullStepHead(worm);
+	wormFullStepTail(worm);
+}

@@ -15,5 +15,8 @@ typedef struct Worm
 
 void wormInit(Worm *worm, uint8_t color, uint16_t pos, Direction direction, Direction *cellDirectionsBuffer);
 void wormDraw(Worm *worm);
+void wormFullStepHead(Worm *worm);
+void wormFullStepTail(Worm *worm);
+void wormStep(Worm *worm);
 
 #endif

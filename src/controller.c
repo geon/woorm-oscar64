@@ -1,4 +1,5 @@
 #include "controller.h"
+#include "worm.h"
 #include <assert.h>
 
 void pathControllerInit(PathController *pathController, Direction path[], uint8_t pathLength)
