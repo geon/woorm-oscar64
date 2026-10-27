@@ -3,6 +3,8 @@
 #include "level.h"
 #include "screen.h"
 #include "title-screen.h"
+#include "worm.h"
+#include "worms.h"
 #include <c64/cia.h>
 #include <c64/joystick.h>
 #include <c64/memmap.h>
@@ -59,6 +61,22 @@ int main()
 		uint8_t numWorms = 4;
 		const Level *level = levels[levelIndex];
 		levelStart(level);
+
+		for (uint8_t wormIndex = 0; wormIndex < numWorms; ++wormIndex)
+		{
+			Worm *worm = &worms[wormIndex];
+			wormInit(
+				worm,
+				wormColors[wormIndex],
+				coordToPos(level->playerStarts[wormIndex].position),
+				level->playerStarts[wormIndex].direction % Direction_count,
+				wormCellDirectionsBuffers[wormIndex]);
+
+			worm->speed = 10;
+
+			// Just for initial drawing.
+			wormStep(worm);
+		}
 
 		levelPlay(level, numWorms);
 
