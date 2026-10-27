@@ -13,6 +13,7 @@ typedef enum ControllerName
 	ControllerName_none = 0,
 	ControllerName_path,
 	ControllerName_aimless,
+	ControllerName_attack,
 	ControllerName_count
 } ControllerName;
 

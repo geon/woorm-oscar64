@@ -1,8 +1,11 @@
 #include "controller.h"
 #include "coord.h"
+#include "screen.h"
 #include "worm.h"
 #include "worms.h"
 #include <assert.h>
+#include <math.h>
+#include <stdlib.h>
 
 Direction getHeadingOfWorm(Worm *worm)
 {
@@ -28,6 +31,11 @@ Worm *getOpponent(Worm *worm)
 	}
 
 	return 0;
+}
+
+Coord getCoordOfWorm(Worm *worm)
+{
+	return coordFromPos(worm->headPosition);
 }
 
 Direction getDirectionOfTarget(Coord wormCoord, Coord targetCoord)
@@ -83,4 +91,23 @@ Direction aimlessControllerGetDirection(Worm *worm)
 {
 	// Just keep moving forwards.
 	return getHeadingOfWorm(worm);
+}
+
+Direction controllerGetDirectionAttack(Worm *worm)
+{
+	Worm *opponent = getOpponent(worm);
+	if (!opponent)
+	{
+		return aimlessControllerGetDirection(nullptr, worm);
+	}
+
+	Coord opponentCoord = getCoordOfWorm(opponent);
+	Coord wormCoord = getCoordOfWorm(worm);
+
+	Direction wantedDirection = getDirectionOfTarget(
+		wormCoord,
+		opponentCoord);
+
+	// When going in the opposite direction, first turn to the side.
+	return turnIfOpposite(getHeadingOfWorm(worm), wantedDirection);
 }
