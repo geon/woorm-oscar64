@@ -229,3 +229,12 @@ void wormStep(Worm *worm)
 
 	vic.color_border = VCOL_BLACK;
 }
+
+void wormSetNextDirection(Worm *worm, Direction wantedNextDirection)
+{
+	Direction currentDirection = circularBufferAtIndexReverse(&worm->cells, 1);
+	if (isValidNextDirection(worm->headPosition, wantedNextDirection))
+	{
+		circularBufferSetAtIndexReverse(&worm->cells, 0, wantedNextDirection);
+	}
+}
