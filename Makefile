@@ -16,6 +16,8 @@ src_files := \
 	src/controller.h \
 	src/title-screen.c \
 	src/title-screen.h \
+	src/worms.c \
+	src/worms.h \
 
 .PHONY: verify
 verify: clean test $(prg)

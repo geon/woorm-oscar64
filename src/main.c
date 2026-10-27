@@ -27,13 +27,6 @@ char charset[2048] = {
 // End "charset" section.
 #pragma data(data)
 
-const uint8_t wormColors[4] = {
-	VCOL_CYAN,
-	VCOL_GREEN,
-	VCOL_YELLOW,
-	VCOL_RED,
-};
-
 void setup(void)
 {
 	// Clear interrupts set by basic/kernal, or it will crash when it is unmapped
